@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Checkout - Maxosmith Health+</title>
+    <link rel="stylesheet" href="payment.css">
+</head>
+
+<body>
+
+<header>
+    <img src="logo_removerbg.png" width="180" class="logo"
+    onclick="window.location.href='homepage_maxo.html'">
+
+    <nav>
+        <button class="nav-btn" onclick="window.location.href='homepage_maxo.html'">Home</button>
+        <button class="nav-btn" onclick="window.location.href='all_products.html'">Products</button>
+        <button class="nav-btn" onclick="window.location.href='cart.html'">Cart</button>
+    </nav>
+</header>
+
+<h1>Checkout</h1>
+
+<div class="checkout-container">
+
+    <div class="checkout-form">
+
+        <h2>Delivery Details</h2>
+
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name">
+
+        <label>Mobile Number</label>
+        <input type="tel" id="mobile" placeholder="Enter mobile number">
+
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="Enter email address">
+
+        <label>Full Address</label>
+        <textarea id="address" placeholder="House no, street, area"></textarea>
+
+        <label>Pincode</label>
+        <input type="text" id="pincode" placeholder="Enter pincode" maxlength="6" oninput="autoFillByPincode()">
+
+        <div class="row">
+
+            <div>
+                <label>State</label>
+                <select id="state" onchange="loadDistricts()">
+                    <option value="">Loading states...</option>
+                </select>
+            </div>
+
+            <div>
+                <label>District</label>
+                <select id="district" disabled>
+                    <option value="">Select District</option>
+                </select>
+            </div>
+
+        </div>
+
+        <h2>Payment Method</h2>
+
+        <div class="payment-options">
+
+            <label>
+                <input type="radio" name="payment" value="Cash on Delivery" checked>
+                Cash on Delivery
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="UPI">
+                UPI
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="Card">
+                Debit / Credit Card
+            </label>
+
+        </div>
+
+        <button class="place-order-btn" onclick="placeOrder()">
+            Place Order
+        </button>
+
+    </div>
+
+    <div class="order-summary">
+
+        <h2>Order Summary</h2>
+
+        <div id="summary-items"></div>
+
+        <hr>
+
+        <p><b>Total MRP:</b> <span id="totalMRP">₹0.00</span></p>
+        <p><b>Product Savings:</b> <span id="productSavings">₹0.00</span></p>
+        <p><b>Extra Discount:</b> <span id="extraDiscount">₹0.00</span></p>
+        <p class="green-line"><b>Total Discount:</b> <span id="totalDiscount">₹0.00</span></p>
+        <p><b>Delivery Charges:</b> <span id="deliveryCharge">₹0.00</span></p>
+
+        <hr>
+
+        <p class="payable">
+            <b>Amount Payable:</b>
+            <span id="payable">₹0.00</span>
+        </p>
+
+    </div>
+
+</div>
+
+<div id="paymentPopup" class="payment-popup">
+
+    <div class="payment-box">
+
+        <span class="close-payment" onclick="closePaymentPopup()">
+            &times;
+        </span>
+
+        <div id="paymentContent"></div>
+
+    </div>
+
+</div>
+
+<script src="products.js"></script>
+
+<script>
+
+const cart =
+JSON.parse(localStorage.getItem("cart")) || [];
+
+let cartSummary =
+JSON.parse(localStorage.getItem("cartSummary"));
+
+let totalRate = 0;
+let totalMRP = 0;
+
+if(cart.length === 0){
+
+    alert("Your cart is empty");
+
+    window.location.href = "all_products.html";
+}
+
+cart.forEach(item => {
+
+    const product =
+    products.find(p => Number(p.id) === Number(item.id));
+
+    if(product){
+
+        const rate =
+        Number(product.rate.replace("₹",""));
+
+        const mrp =
+        Number(product.MRP.replace("₹",""));
+
+        totalRate += rate * item.quantity;
+        totalMRP += mrp * item.quantity;
+
+        document.getElementById("summary-items").innerHTML += `
+
+            <div class="summary-product">
+                <span>${product.name}</span>
+                <small>Qty: ${item.quantity}</small>
+                <b>₹${(rate * item.quantity).toFixed(2)}</b>
+            </div>
+
+        `;
+    }
+
+});
+
+let productSavings = totalMRP - totalRate;
+let deliveryCharge = totalRate < 1500 ? 80 : 0;
+let extraDiscount = totalRate >= 2500 ? totalRate * 0.05 : 0;
+let totalDiscount = productSavings + extraDiscount;
+let finalAmount = totalRate + deliveryCharge - extraDiscount;
+
+if(cartSummary){
+
+    totalMRP = Number(cartSummary.totalMRP);
+    totalRate = Number(cartSummary.productTotal);
+    productSavings = Number(cartSummary.productSavings);
+    deliveryCharge = Number(cartSummary.deliveryCharge);
+    extraDiscount = Number(cartSummary.extraDiscount);
+    totalDiscount = Number(cartSummary.totalDiscount || productSavings + extraDiscount);
+    finalAmount = Number(cartSummary.finalAmount);
+}
+
+document.getElementById("totalMRP").innerHTML =
+"₹" + totalMRP.toFixed(2);
+
+document.getElementById("productSavings").innerHTML =
+"₹" + productSavings.toFixed(2);
+
+document.getElementById("extraDiscount").innerHTML =
+"₹" + extraDiscount.toFixed(2);
+
+document.getElementById("totalDiscount").innerHTML =
+"₹" + totalDiscount.toFixed(2);
+
+document.getElementById("deliveryCharge").innerHTML =
+"₹" + deliveryCharge.toFixed(2);
+
+document.getElementById("payable").innerHTML =
+"₹" + finalAmount.toFixed(2);
+
+/* PINCODE JSON SYSTEM */
+
+let pincodeData = {};
+let stateDistrictData = {};
+
+function normalizeText(value){
+
+    return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\b\w/g, char => char.toUpperCase());
+}
+
+function buildStateDistrictData(){
+
+    stateDistrictData = {};
+
+    Object.keys(pincodeData).forEach(pin => {
+
+        const state =
+        normalizeText(pincodeData[pin].state);
+
+        const district =
+        normalizeText(pincodeData[pin].district);
+
+        if(state === "" || district === ""){
+            return;
+        }
+
+        if(!stateDistrictData[state]){
+            stateDistrictData[state] = [];
+        }
+
+        if(!stateDistrictData[state].includes(district)){
+            stateDistrictData[state].push(district);
+        }
+
+    });
+
+    Object.keys(stateDistrictData).forEach(state => {
+        stateDistrictData[state].sort();
+    });
+}
+
+function loadStates(){
+
+    const stateSelect =
+    document.getElementById("state");
+
+    stateSelect.innerHTML =
+    `<option value="">Select State</option>`;
+
+    Object.keys(stateDistrictData)
+    .sort()
+    .forEach(state => {
+
+        stateSelect.innerHTML += `
+
+            <option value="${state}">
+                ${state}
+            </option>
+
+        `;
+    });
+}
+
+function loadDistricts(){
+
+    const state =
+    document.getElementById("state").value;
+
+    const districtSelect =
+    document.getElementById("district");
+
+    districtSelect.innerHTML =
+    `<option value="">Select District</option>`;
+
+    if(state === "" || !stateDistrictData[state]){
+
+        districtSelect.disabled = true;
+
+        return;
+    }
+
+    stateDistrictData[state].forEach(district => {
+
+        districtSelect.innerHTML += `
+
+            <option value="${district}">
+                ${district}
+            </option>
+
+        `;
+    });
+
+    districtSelect.disabled = false;
+}
+
+function autoFillByPincode(){
+
+    const pincode =
+    document.getElementById("pincode").value.trim();
+
+    if(pincode.length !== 6){
+        return;
+    }
+
+    if(Object.keys(pincodeData).length === 0){
+
+        alert("Pincode database is still loading. Please try again in a second.");
+
+        return;
+    }
+
+    if(pincodeData[pincode]){
+
+        const state =
+        normalizeText(pincodeData[pincode].state);
+
+        const district =
+        normalizeText(pincodeData[pincode].district);
+
+        document.getElementById("state").value =
+        state;
+
+        loadDistricts();
+
+        document.getElementById("district").value =
+        district;
+
+    }else{
+
+        alert("Pincode not found. Please select State and District manually.");
+    }
+}
+
+fetch("pincode.json")
+.then(response => response.json())
+.then(data => {
+
+    pincodeData = data;
+
+    buildStateDistrictData();
+
+    loadStates();
+
+})
+.catch(error => {
+
+    alert("Pincode database could not be loaded. Please use Live Server and keep pincode.json in the same folder.");
+
+    document.getElementById("state").innerHTML =
+    `<option value="">Pincode data not loaded</option>`;
+});
+
+/* ORDER */
+
+function placeOrder(){
+
+    const name =
+    document.getElementById("name").value.trim();
+
+    const mobile =
+    document.getElementById("mobile").value.trim();
+
+    const email =
+    document.getElementById("email").value.trim();
+
+    const address =
+    document.getElementById("address").value.trim();
+
+    const state =
+    document.getElementById("state").value.trim();
+
+    const district =
+    document.getElementById("district").value.trim();
+
+    const pincode =
+    document.getElementById("pincode").value.trim();
+
+    const payment =
+    document.querySelector('input[name="payment"]:checked').value;
+
+    if(
+        name === "" ||
+        mobile === "" ||
+        address === "" ||
+        state === "" ||
+        district === "" ||
+        pincode === ""
+    ){
+
+        alert("Please fill all required delivery details.");
+
+        return;
+    }
+
+    if(mobile.length < 10){
+
+        alert("Please enter a valid mobile number.");
+
+        return;
+    }
+
+    if(
+        payment === "Cash on Delivery" &&
+        finalAmount > 2500
+    ){
+
+        alert("COD is available only for orders up to ₹2500. Please choose UPI or Card payment.");
+
+        return;
+    }
+
+    if(payment === "Cash on Delivery"){
+
+        saveOrder("Cash on Delivery");
+
+    }else{
+
+        openPaymentPopup(payment);
+    }
+}
+
+function openPaymentPopup(payment){
+
+    const popup =
+    document.getElementById("paymentPopup");
+
+    const content =
+    document.getElementById("paymentContent");
+
+    if(payment === "UPI"){
+
+        content.innerHTML = `
+
+            <h2>Scan & Pay</h2>
+
+            <p class="payment-note">
+                Scan this QR code to complete UPI payment.
+            </p>
+
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1"
+               target="_blank">
+
+                <div class="fake-qr">
+                    QR
+                </div>
+
+            </a>
+
+            <p class="amount-text">
+                Amount: ₹${finalAmount.toFixed(2)}
+            </p>
+
+            <button class="confirm-pay-btn"
+            onclick="saveOrder('UPI')">
+                I Have Paid
+            </button>
+
+        `;
+    }
+
+    if(payment === "Card"){
+
+        content.innerHTML = `
+
+            <h2>Card Payment</h2>
+
+            <label>Card Holder Name</label>
+            <input type="text" id="cardName" placeholder="Name on card">
+
+            <label>Card Number</label>
+            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+
+            <div class="card-row">
+
+                <div>
+                    <label>Expiry</label>
+                    <input type="text" id="expiry" placeholder="MM/YY" maxlength="5">
+                </div>
+
+                <div>
+                    <label>CVV</label>
+                    <input type="password" id="cvv" placeholder="CVV" maxlength="3">
+                </div>
+
+            </div>
+
+            <p class="amount-text">
+                Amount: ₹${finalAmount.toFixed(2)}
+            </p>
+
+            <button class="confirm-pay-btn"
+            onclick="validateCardPayment()">
+                Pay Now
+            </button>
+
+        `;
+    }
+
+    popup.style.display = "flex";
+}
+
+function closePaymentPopup(){
+
+    document.getElementById("paymentPopup").style.display =
+    "none";
+}
+
+function validateCardPayment(){
+
+    const cardName =
+    document.getElementById("cardName").value.trim();
+
+    const cardNumber =
+    document.getElementById("cardNumber").value.trim();
+
+    const expiry =
+    document.getElementById("expiry").value.trim();
+
+    const cvv =
+    document.getElementById("cvv").value.trim();
+
+    if(
+        cardName === "" ||
+        cardNumber === "" ||
+        expiry === "" ||
+        cvv === ""
+    ){
+
+        alert("Please fill all card details.");
+
+        return;
+    }
+
+    if(cardNumber.length < 12){
+
+        alert("Please enter a valid card number.");
+
+        return;
+    }
+
+    if(cvv.length !== 3){
+
+        alert("Please enter valid CVV.");
+
+        return;
+    }
+
+    saveOrder("Card");
+}
+
+function saveOrder(payment){
+
+    const order = {
+
+        customerName:
+        document.getElementById("name").value.trim(),
+
+        mobile:
+        document.getElementById("mobile").value.trim(),
+
+        email:
+        document.getElementById("email").value.trim(),
+
+        address:
+        document.getElementById("address").value.trim(),
+
+        state:
+        document.getElementById("state").value.trim(),
+
+        district:
+        document.getElementById("district").value.trim(),
+
+        pincode:
+        document.getElementById("pincode").value.trim(),
+
+        paymentMethod:
+        payment,
+
+        cart:
+        cart,
+
+        totalMRP:
+        totalMRP.toFixed(2),
+
+        productTotal:
+        totalRate.toFixed(2),
+
+        productSavings:
+        productSavings.toFixed(2),
+
+        deliveryCharge:
+        deliveryCharge.toFixed(2),
+
+        extraDiscount:
+        extraDiscount.toFixed(2),
+
+        totalDiscount:
+        totalDiscount.toFixed(2),
+
+        amount:
+        finalAmount.toFixed(2),
+
+        orderDate:
+        new Date().toLocaleString()
+    };
+
+    localStorage.setItem(
+        "lastOrder",
+        JSON.stringify(order)
+    );
+
+    localStorage.removeItem("cart");
+
+    localStorage.removeItem("cartSummary");
+
+    alert("Order placed successfully!");
+
+    window.location.href =
+    "homepage_maxo.html";
+}
+
+</script>
+
+</body>
+
+</html>

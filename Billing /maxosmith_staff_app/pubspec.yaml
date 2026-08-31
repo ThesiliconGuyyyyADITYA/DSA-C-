@@ -1,0 +1,49 @@
+name: maxosmith_staff_app
+description: "MAXOSMITH Staff Application"
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  http: ^1.2.2
+
+  # Saves attendance locally even after closing the app.
+  shared_preferences: ^2.5.5
+
+  # Used for the 7:30 PM attendance reminder.
+  flutter_local_notifications: ^22.1.0
+
+  # Detects the phone's local timezone.
+  flutter_timezone: ^5.1.0
+
+  # Provides timezone-aware notification scheduling.
+  timezone: ^0.11.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/logo.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/logo.png"
+  adaptive_icon_foreground_inset: 8

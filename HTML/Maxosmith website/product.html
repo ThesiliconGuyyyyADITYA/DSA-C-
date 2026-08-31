@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Product Details</title>
+    <link rel="stylesheet" href="product.css">
+</head>
+
+<body>
+
+<header>
+
+    <img src="logo_removerbg.png"
+     width="180"
+     class="logo"
+     onclick="window.location.href='homepage_maxo.html'">
+
+    <nav>
+
+        <button class="nav-btn"
+        onclick="window.location.href='homepage_maxo.html'">
+            Home
+        </button>
+
+        <button class="nav-btn"
+        onclick="window.location.href='all_products.html'">
+            Products
+        </button>
+
+        <button class="nav-btn"
+        onclick="window.location.href='cart.html'">
+            Cart
+        </button>
+
+    </nav>
+
+</header>
+
+<br>
+
+<center>
+
+<div class="search-container">
+
+    <input type="text"
+           id="productSearch"
+           placeholder="Search medicines..."
+           autocomplete="off">
+
+    <div id="suggestions"></div>
+
+</div>
+
+</center>
+
+<div class="action-buttons">
+
+    <button class="back-btn"
+    onclick="window.location.href='all_products.html'">
+        ← Products
+    </button>
+
+    <button class="back-btn"
+    onclick="window.location.href='cart.html'">
+        🛒 Cart
+    </button>
+
+</div>
+
+<div class="product-container">
+
+    <img id="image">
+
+    <div class="info">
+
+        <h1 id="name"></h1>
+
+        <p id="rate"></p>
+
+        <p id="mrp"></p>
+
+        <p id="pack"></p>
+
+        <div class="quantity-box">
+
+            <button onclick="decreaseQuantity()">-</button>
+
+            <span id="quantity">1</span>
+
+            <span class="unit">Strip(s)</span>
+
+            <button onclick="increaseQuantity()">+</button>
+
+        </div>
+
+        <button class="buy-btn"
+        onclick="addToCart()">
+
+            🛒 Add To Cart
+
+        </button>
+
+    </div>
+
+</div>
+
+<h3>Composition</h3>
+<p id="composition"></p>
+
+<h3>Uses / Benefits</h3>
+<p id="uses"></p>
+
+<h3>Common Side Effects</h3>
+<p id="sideEffects"></p>
+
+<h3>How To Use</h3>
+<p id="dosage"></p>
+
+<h3>Safety Advice</h3>
+<p id="precautions"></p>
+
+<script src="products.js"></script>
+<script src="productDetails.js"></script>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const productId = Number(params.get("id"));
+
+const product = products.find(
+    p => p.id === productId
+);
+
+if(!product){
+    alert("Product not found");
+    window.location.href = "all_products.html";
+}
+
+const details = productDetails[productId];
+
+document.getElementById("name").innerHTML =
+product.name;
+
+document.getElementById("rate").innerHTML =
+"Rate: " + product.rate;
+
+document.getElementById("mrp").innerHTML =
+"MRP: " + product.MRP;
+
+document.getElementById("pack").innerHTML =
+"Pack: " + product.pack;
+
+document.getElementById("image").src =
+product.image && product.image.trim() !== ""
+? product.image
+: "no-image.png";
+
+let quantity = 1;
+
+function increaseQuantity(){
+
+    quantity++;
+
+    document.getElementById("quantity").innerHTML =
+    quantity;
+}
+
+function decreaseQuantity(){
+
+    if(quantity > 1){
+
+        quantity--;
+
+        document.getElementById("quantity").innerHTML =
+        quantity;
+    }
+}
+
+function addToCart(){
+
+    let cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+    let existingItem =
+    cart.find(item => item.id === product.id);
+
+    if(existingItem){
+
+        existingItem.quantity += quantity;
+
+    }else{
+
+        cart.push({
+            id: product.id,
+            quantity: quantity
+        });
+
+    }
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    alert("ITEM ADDED TO CART , CLICK THE CART BUTTON TO SEE :)");
+}
+
+/* ---------------- PRODUCT DETAILS ---------------- */
+
+const errorText = "ERROR - DETAILS NOT DEFINED";
+
+if(details){
+
+    document.getElementById("composition").innerHTML =
+    details.composition && details.composition.trim() !== ""
+    ? details.composition
+    : errorText;
+
+    document.getElementById("uses").innerHTML =
+    details.uses && details.uses.trim() !== ""
+    ? details.uses
+    : errorText;
+
+    document.getElementById("sideEffects").innerHTML =
+    details.sideEffects && details.sideEffects.trim() !== ""
+    ? details.sideEffects
+    : errorText;
+
+    document.getElementById("dosage").innerHTML =
+    details.dosage && details.dosage.trim() !== ""
+    ? details.dosage
+    : errorText;
+
+    document.getElementById("precautions").innerHTML =
+    details.precautions && details.precautions.trim() !== ""
+    ? details.precautions
+    : errorText;
+
+}else{
+
+    document.getElementById("composition").innerHTML = errorText;
+    document.getElementById("uses").innerHTML = errorText;
+    document.getElementById("sideEffects").innerHTML = errorText;
+    document.getElementById("dosage").innerHTML = errorText;
+    document.getElementById("precautions").innerHTML = errorText;
+}
+
+</script>
+
+</body>
+
+</html>

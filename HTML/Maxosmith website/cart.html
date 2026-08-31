@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="cart.css">
+</head>
+
+<body>
+
+<header>
+    <img src="logo_removerbg.png" width="180" class="logo"
+    onclick="window.location.href='homepage_maxo.html'">
+
+    <nav>
+        <button class="nav-btn" onclick="window.location.href='homepage_maxo.html'">Home</button>
+        <button class="nav-btn" onclick="window.location.href='all_products.html'">Products</button>
+        <button class="nav-btn" onclick="window.location.href='cart.html'">Cart</button>
+    </nav>
+</header>
+
+<h1 id="cart-title">Your Cart</h1>
+
+<div id="cart-items"></div>
+<hr>
+<div id="offer-section"></div>
+<div id="summary"></div>
+
+<script src="products.js"></script>
+
+<script>
+
+let totalRate = 0;
+let totalMRP = 0;
+let productDiscount = 0;
+let deliveryCharge = 0;
+let extraDiscount = 0;
+let totalDiscount = 0;
+let finalAmount = 0;
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function mergeCartDuplicates(){
+
+    const mergedCart = [];
+
+    cart.forEach(item => {
+
+        const id = Number(item.id);
+        const quantity = Number(item.quantity) || 1;
+
+        const existing =
+        mergedCart.find(cartItem => Number(cartItem.id) === id);
+
+        if(existing){
+            existing.quantity += quantity;
+        }else{
+            mergedCart.push({ id:id, quantity:quantity });
+        }
+
+    });
+
+    cart = mergedCart;
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+mergeCartDuplicates();
+
+let totalItems = 0;
+
+cart.forEach(item => {
+    totalItems += item.quantity;
+});
+
+document.getElementById("cart-title").innerHTML =
+`Your Cart (${totalItems} Items)`;
+
+if(totalItems === 0){
+
+    document.getElementById("cart-items").innerHTML = `
+        <div class="empty-cart">
+            <h2>🛒 Your cart is empty</h2>
+            <p>Add items in cart before checkout.</p>
+        </div>
+    `;
+
+    document.getElementById("offer-section").innerHTML = "";
+
+    document.getElementById("summary").innerHTML = `
+        <h2>Cart Summary</h2>
+        <p><b>Cart Value:</b> ₹0.00</p>
+        <p><b>Total MRP:</b> ₹0.00</p>
+        <p><b>Product Savings:</b> ₹0.00</p>
+        <p><b>Extra Discount:</b> ₹0.00</p>
+        <p style="color:#16a34a;font-weight:bold;">
+            <b>Total Discount:</b> ₹0.00
+        </p>
+        <p><b>Delivery Charges:</b> ₹0.00</p>
+        <p style="font-size:28px;color:#64748b;">
+            <b>Amount Payable:</b> ₹0.00
+        </p>
+    `;
+
+}else{
+
+    cart.forEach(item => {
+
+        const product =
+        products.find(p => Number(p.id) === Number(item.id));
+
+        if(!product){
+            return;
+        }
+
+        const rate = Number(product.rate.replace("₹",""));
+        const mrp = Number(product.MRP.replace("₹",""));
+
+        totalRate += rate * item.quantity;
+        totalMRP += mrp * item.quantity;
+
+        document.getElementById("cart-items").innerHTML += `
+
+        <div class="cart-card">
+
+            <img src="${
+                product.image && product.image.trim() !== ""
+                ? product.image
+                : "no-image.png"
+            }">
+
+            <div class="cart-info">
+
+                <h2>${product.name}</h2>
+
+                <p>Rate: ${product.rate}</p>
+                <p>MRP: ${product.MRP}</p>
+                <p>Pack: ${product.pack}</p>
+
+                <div class="quantity-box">
+
+                    <button class="nav-btn"
+                    onclick="decreaseCartQuantity(${item.id})">
+                        -
+                    </button>
+
+                    <span>${item.quantity} Strip(s)</span>
+
+                    <button class="nav-btn"
+                    onclick="increaseCartQuantity(${item.id})">
+                        +
+                    </button>
+
+                </div>
+
+                <button class="remove-btn"
+                onclick="removeItem(${item.id})">
+                    🗑 Remove
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    productDiscount = totalMRP - totalRate;
+
+    deliveryCharge = totalRate < 1500 ? 80 : 0;
+
+    extraDiscount = totalRate >= 2500 ? totalRate * 0.05 : 0;
+
+    totalDiscount = productDiscount + extraDiscount;
+
+    finalAmount = totalRate + deliveryCharge - extraDiscount;
+
+    let offerHTML = "";
+
+    if(totalRate < 1500){
+
+        offerHTML += `
+        <div class="offer-card">
+            🚚 <b>FREE PAN INDIA DELIVERY</b>
+            <br><br>
+            Add products worth
+            <b>₹${(1500 - totalRate).toFixed(2)}</b>
+            more to unlock FREE DELIVERY.
+        </div>
+        `;
+
+    }else{
+
+        offerHTML += `
+        <div class="offer-card success-offer">
+            ✅ FREE DELIVERY UNLOCKED
+        </div>
+        `;
+    }
+
+    if(totalRate < 2500){
+
+        offerHTML += `
+        <div class="offer-card">
+            🎁 <b>EXTRA 5% DISCOUNT OFFER</b>
+            <br><br>
+            Add products worth
+            <b>₹${(2500 - totalRate).toFixed(2)}</b>
+            more to get an additional <b>5% OFF</b>.
+        </div>
+        `;
+
+    }else{
+
+        offerHTML += `
+        <div class="offer-card success-offer">
+            🎉 EXTRA 5% DISCOUNT APPLIED
+            <br><br>
+            You saved ₹${extraDiscount.toFixed(2)}
+        </div>
+        `;
+    }
+
+    document.getElementById("offer-section").innerHTML = offerHTML;
+
+    document.getElementById("summary").innerHTML = `
+        <h2>Cart Summary</h2>
+
+        <p><b>Cart Value:</b> ₹${totalRate.toFixed(2)}</p>
+        <p><b>Total MRP:</b> ₹${totalMRP.toFixed(2)}</p>
+        <p><b>Product Savings:</b> ₹${productDiscount.toFixed(2)}</p>
+        <p><b>Extra Discount:</b> ₹${extraDiscount.toFixed(2)}</p>
+
+        <p style="color:#16a34a;font-weight:bold;">
+            <b>Total Discount:</b> ₹${totalDiscount.toFixed(2)}
+        </p>
+
+        <p><b>Delivery Charges:</b> ₹${deliveryCharge.toFixed(2)}</p>
+
+        <hr>
+
+        <p style="font-size:30px;color:#16a34a;font-weight:bold;">
+            <b>Amount Payable:</b> ₹${finalAmount.toFixed(2)}
+        </p>
+    `;
+}
+
+function removeItem(id){
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart = cart.filter(item => Number(item.id) !== Number(id));
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    location.reload();
+}
+
+function increaseCartQuantity(id){
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const item =
+    cart.find(item => Number(item.id) === Number(id));
+
+    if(item){
+        item.quantity++;
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    location.reload();
+}
+
+function decreaseCartQuantity(id){
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const item =
+    cart.find(item => Number(item.id) === Number(id));
+
+    if(item && item.quantity > 1){
+
+        item.quantity--;
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        location.reload();
+    }
+}
+
+function proceedToCheckout(){
+
+    if(totalItems === 0){
+
+        alert("Your cart is empty. Please add products before checkout.");
+
+        return;
+    }
+
+    const cartSummary = {
+        cartValue: totalRate.toFixed(2),
+        totalMRP: totalMRP.toFixed(2),
+        productTotal: totalRate.toFixed(2),
+        productSavings: productDiscount.toFixed(2),
+        deliveryCharge: deliveryCharge.toFixed(2),
+        extraDiscount: extraDiscount.toFixed(2),
+        totalDiscount: totalDiscount.toFixed(2),
+        finalAmount: finalAmount.toFixed(2)
+    };
+
+    localStorage.setItem("cartSummary", JSON.stringify(cartSummary));
+
+    window.location.href = "payment.html";
+}
+
+</script>
+
+<div class="bottom-buttons">
+
+    <button class="proceed-btn"
+    onclick="window.location.href='all_products.html'">
+        Continue Shopping
+    </button>
+
+    <button id="checkoutBtn"
+    class="checkout-btn"
+    onclick="proceedToCheckout()">
+        Proceed To Checkout →
+    </button>
+
+</div>
+
+<section class="policy-section">
+
+    <h2>Important Information</h2>
+
+    <p>• Medicines and healthcare products should be used only as directed by a qualified healthcare professional.</p>
+    <p>• Product images shown on this website are for representation purposes only. Actual packaging may vary.</p>
+    <p>• Prices and availability are subject to change without prior notice.</p>
+    <p>• Prescription medicines may require a valid prescription before purchase and delivery.</p>
+    <p>• Returns and replacements are subject to company policy and product condition.</p>
+    <p>• Maxosmith Health+ strives to provide genuine products sourced from trusted manufacturers and distributors.</p>
+    <p>• By continuing to use this website, you agree to our Terms of Service and Privacy Policy.</p>
+
+</section>
+
+<footer>
+    <p>© 2026 Maxosmith Health+</p>
+    <p>Your Trusted Healthcare Partner</p>
+</footer>
+
+</body>
+
+</html>

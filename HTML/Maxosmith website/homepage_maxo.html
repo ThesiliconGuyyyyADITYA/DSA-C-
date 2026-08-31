@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Maxosmith Health+</title>
+
+    <link rel="stylesheet" href="homepage_maxo.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script src="products.js"></script>
+</head>
+
+<body>
+
+<header>
+
+    <img src="logo_removerbg.png"
+         width="180"
+         class="logo"
+         onclick="window.location.href='homepage_maxo.html'">
+
+    <nav>
+        <button class="nav-btn" onclick="window.location.href='all_products.html'">Products</button>
+        <button class="nav-btn" onclick="window.location.href='cart.html'">Cart</button>
+
+        <button id="loginButton" class="login-btn" onclick="openLoginPopup()">
+            Sign In / Log In
+        </button>
+
+        <div id="profileCircle"
+             class="profile-circle"
+             onclick="toggleProfileMenu()"
+             style="display:none;">
+        </div>
+
+        <div id="profileMenu"
+             class="profile-menu"
+             style="display:none;">
+
+            <div id="profileName"></div>
+
+            <hr>
+
+            <button class="profile-menu-option" onclick="openAddressBook()">
+                Address Book
+            </button>
+
+            <button onclick="logoutUser()">
+                Logout
+            </button>
+
+        </div>
+    </nav>
+
+</header>
+
+<section class="hero">
+
+    <h1>Welcome to Maxosmith Health+</h1>
+
+    <p>Trusted Pharmaceutical Distributor</p>
+
+    <div class="main-search-bar">
+
+        <div class="location-box" onclick="detectUserLocation()">
+
+            <span class="location-icon">📍</span>
+
+            <span id="currentLocation">Detect Location</span>
+
+            <span class="target-icon">⌖</span>
+
+        </div>
+
+        <div class="search-container">
+
+            <input type="text"
+                   id="homeSearch"
+                   placeholder="Search for Medicines and Health Products"
+                   autocomplete="off">
+
+            <span class="search-icon" onclick="searchMedicine()">🔍</span>
+
+            <div id="suggestions"></div>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <button class="shop-btn" onclick="window.location.href='all_products.html'">
+        Browse Products
+    </button>
+
+</section>
+
+<section class="stats">
+
+    <div class="stat-card">
+        <h2>100+</h2>
+        <p>Products Available</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>24/7</h2>
+        <p>Customer Support</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>100%</h2>
+        <p>Genuine Medicines</p>
+    </div>
+
+</section>
+
+<section class="about">
+
+    <h2>About Us</h2>
+
+    <p>
+        Maxosmith Health+ is a trusted medicine distributor providing quality healthcare
+        products at competitive prices. We offer tablets, capsules, syrups,
+        injections, ointments and many other pharmaceutical products from trusted
+        manufacturers.
+    </p>
+
+</section>
+
+<section class="services">
+
+    <h2>Why Choose Us?</h2>
+
+    <div class="service-grid">
+        <div class="service-box">✓ Genuine Medicines</div>
+        <div class="service-box">✓ Competitive Prices</div>
+        <div class="service-box">✓ Fast Delivery</div>
+        <div class="service-box">✓ Wide Product Range</div>
+    </div>
+
+</section>
+
+<section class="services">
+
+    <h2>Our Promise</h2>
+
+    <div class="service-grid">
+        <div class="service-box">🏥 Quality Healthcare Products</div>
+        <div class="service-box">🚚 Reliable Supply Chain</div>
+        <div class="service-box">💰 Affordable Pricing</div>
+        <div class="service-box">⭐ Customer Satisfaction</div>
+    </div>
+
+</section>
+
+<footer>
+
+    <p>© 2026 Maxosmith Health+</p>
+
+    <br>
+
+    <p>Your Trusted Healthcare Partner</p>
+
+    <br><br>
+
+    <div class="footer-links">
+
+        <a href="#" onclick="openContact()">Contact Us</a>
+        <a href="#" onclick="openAbout()">About Us</a>
+        <a href="#" onclick="openPolicy()">Company Policy</a>
+
+    </div>
+
+</footer>
+
+<!-- LOCATION POPUP -->
+
+<div id="locationPopup" class="location-popup">
+
+    <div class="location-popup-box">
+
+        <div class="location-popup-header">
+
+            <h2>Confirm delivery area</h2>
+
+            <span onclick="closeLocationPopup()">&times;</span>
+
+        </div>
+
+        <div id="map"></div>
+
+        <div class="location-details">
+
+            <div class="location-row">
+
+                <span class="location-small-icon">📍</span>
+
+                <div>
+                    <h3 id="selectedLocationTitle">Detecting location...</h3>
+                    <p id="selectedLocationAddress">Please wait while we detect your area.</p>
+                </div>
+
+                <button class="change-location-btn" onclick="detectUserLocation()">
+                    Change
+                </button>
+
+            </div>
+
+        </div>
+
+        <button class="confirm-location-btn" onclick="confirmLocation()">
+            Confirm location and continue
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ADDRESS BOOK POPUP -->
+
+<div id="addressBookPopup" class="popup">
+
+    <div class="popup-content">
+
+        <span class="close-btn" onclick="closeAddressBook()">
+            &times;
+        </span>
+
+        <h2>Address Book</h2>
+
+        <div id="savedAddressList"></div>
+
+        <button class="login-submit-btn" onclick="addAnotherAddress()">
+            + Add Another Address
+        </button>
+
+    </div>
+
+</div>
+
+<!-- LOGIN POPUP -->
+
+<div id="loginPopup" class="popup">
+
+    <div class="login-popup-content">
+
+        <span class="close-btn" onclick="closeLoginPopup()">&times;</span>
+
+        <h2>Welcome Back</h2>
+
+        <p class="login-subtitle">
+            Sign in to continue with Maxosmith Health+
+        </p>
+
+        <label>Email / Mobile Number</label>
+        <input type="text" id="loginUser" placeholder="Enter email or mobile">
+
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password">
+
+        <button class="login-submit-btn" onclick="loginUser()">Log In</button>
+
+        <p class="signup-text">
+            New user?
+            <span onclick="showSignupForm()">Create Account</span>
+        </p>
+
+        <div id="signupForm" style="display:none;">
+
+            <hr>
+
+            <h2>Create Account</h2>
+
+            <label>Full Name</label>
+            <input type="text" id="signupName" placeholder="Enter full name">
+
+            <label>Mobile Number</label>
+            <input type="tel" id="signupMobile" placeholder="Enter mobile number">
+
+            <label>Email</label>
+            <input type="email" id="signupEmail" placeholder="Enter email">
+
+            <label>Password</label>
+            <input type="password" id="signupPassword" placeholder="Create password">
+
+            <button class="login-submit-btn" onclick="signupUser()">Sign Up</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CONTACT POPUP -->
+
+<div id="contactPopup" class="popup">
+
+    <div class="popup-content">
+
+        <span class="close-btn" onclick="closeContact()">&times;</span>
+
+        <h2>Contact Us</h2>
+
+        <ul>
+            <li><b>Phone:</b> 1234567890</li>
+            <li><b>Email:</b> maxosmith.health+@gmail.com</li>
+            <li><b>Customer Support:</b> For order status, product availability, delivery support, and general queries.</li>
+            <li><b>Business Support:</b> For bulk orders, retailer supply, and healthcare product enquiries.</li>
+            <li><b>Working Hours:</b> Monday to Saturday, 10:00 AM to 6:00 PM.</li>
+            <li><b>Service Mode:</b> Online and offline healthcare product support.</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<!-- ABOUT POPUP -->
+
+<div id="aboutPopup" class="popup">
+
+    <div class="popup-content">
+
+        <span class="close-btn" onclick="closeAbout()">&times;</span>
+
+        <h2>About Maxosmith Health+</h2>
+
+        <ul>
+            <li>Maxosmith Health+ is a sub-brand of Maxosmith (OPC), working in offline and online healthcare needs.</li>
+            <li>We deal in high-quality allopathic medicines and other healthcare products.</li>
+            <li>Our focus is to provide genuine medicines, competitive prices, and reliable supply support.</li>
+            <li>We offer tablets, capsules, syrups, injections, ointments, and other healthcare essentials.</li>
+            <li>Maxosmith Health+ aims to make healthcare products more accessible, affordable, and convenient for customers.</li>
+            <li>We work with trusted manufacturers and distributors to support quality and availability.</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<!-- POLICY POPUP -->
+
+<div id="policyPopup" class="popup">
+
+    <div class="popup-content">
+
+        <span class="close-btn" onclick="closePolicy()">&times;</span>
+
+        <h2>Maxosmith Health+ Policy</h2>
+
+        <ul>
+            <li>All medicines supplied are sourced from authorized distributors and manufacturers.</li>
+            <li>Product availability may change without prior notice.</li>
+            <li>Prescription medicines should be purchased only against a valid prescription where applicable.</li>
+            <li>Due to safety and regulatory reasons, medicines once sold are generally not returnable.</li>
+            <li>Replacement may be considered only in case of damaged, expired, or incorrect products delivered.</li>
+            <li>Prices displayed are subject to change according to market conditions.</li>
+            <li>Customers should verify medicine details before placing an order.</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<script>
+
+const GOOGLE_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbz73QgZFnYLslX13WmamysjZxDiptgKw_q6M2weJzjetWryqMxXfL08Z1bt-bbUPvTp/exec";
+
+/* LOCATION SYSTEM - OPENSTREETMAP */
+
+let map;
+let marker;
+let selectedLat;
+let selectedLng;
+let selectedAddress = "";
+
+function loadSavedLocation(){
+
+    const savedLocation =
+    localStorage.getItem("userLocationName");
+
+    if(savedLocation){
+
+        document.getElementById("currentLocation").innerHTML =
+        savedLocation;
+    }
+}
+
+function detectUserLocation(){
+
+    const locationText =
+    document.getElementById("currentLocation");
+
+    if(!navigator.geolocation){
+
+        alert("Location is not supported in this browser.");
+
+        return;
+    }
+
+    locationText.innerHTML =
+    "Detecting...";
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            selectedLat =
+            position.coords.latitude;
+
+            selectedLng =
+            position.coords.longitude;
+
+            openLocationPopup();
+
+        },
+
+        function(error){
+
+            locationText.innerHTML =
+            "Location Denied";
+
+            alert("Please allow location permission to detect your delivery location.");
+        }
+    );
+}
+
+function openLocationPopup(){
+
+    document.getElementById("locationPopup").style.display =
+    "flex";
+
+    setTimeout(function(){
+
+        if(map){
+            map.remove();
+        }
+
+        map =
+        L.map("map").setView(
+            [selectedLat, selectedLng],
+            17
+        );
+
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom:19,
+                attribution:"© OpenStreetMap"
+            }
+        ).addTo(map);
+
+        marker =
+        L.marker(
+            [selectedLat, selectedLng],
+            {
+                draggable:true
+            }
+        ).addTo(map);
+
+        marker.on("dragend", function(){
+
+            const position =
+            marker.getLatLng();
+
+            selectedLat =
+            position.lat;
+
+            selectedLng =
+            position.lng;
+
+            reverseGeocode(selectedLat, selectedLng);
+        });
+
+        reverseGeocode(selectedLat, selectedLng);
+
+        setTimeout(function(){
+            map.invalidateSize();
+        }, 400);
+
+    }, 300);
+}
+
+function reverseGeocode(lat, lng){
+
+    fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+    )
+    .then(response => response.json())
+    .then(data => {
+
+        selectedAddress =
+        data.display_name || "Selected location";
+
+        let areaName =
+        data.address.suburb ||
+        data.address.neighbourhood ||
+        data.address.city ||
+        data.address.town ||
+        data.address.village ||
+        data.address.county ||
+        data.address.state ||
+        "Selected Location";
+
+        document.getElementById("selectedLocationTitle").innerHTML =
+        areaName;
+
+        document.getElementById("selectedLocationAddress").innerHTML =
+        selectedAddress;
+    })
+    .catch(error => {
+
+        selectedAddress =
+        "Selected location";
+
+        document.getElementById("selectedLocationTitle").innerHTML =
+        "Selected Location";
+
+        document.getElementById("selectedLocationAddress").innerHTML =
+        "Address not found. You can still confirm this location.";
+    });
+}
+
+function confirmLocation(){
+
+    const title =
+    document.getElementById("selectedLocationTitle").innerHTML;
+
+    const addressObject = {
+        title:title,
+        address:selectedAddress,
+        latitude:selectedLat,
+        longitude:selectedLng,
+        savedAt:new Date().toLocaleString()
+    };
+
+    localStorage.setItem("userLocationName", title);
+    localStorage.setItem("userFullAddress", selectedAddress);
+    localStorage.setItem("userLatitude", selectedLat);
+    localStorage.setItem("userLongitude", selectedLng);
+
+    saveAddressToBook(addressObject);
+
+    document.getElementById("currentLocation").innerHTML =
+    title;
+
+    closeLocationPopup();
+}
+
+function closeLocationPopup(){
+
+    document.getElementById("locationPopup").style.display =
+    "none";
+}
+
+/* ADDRESS BOOK */
+
+function saveAddressToBook(addressObject){
+
+    let addressBook =
+    JSON.parse(localStorage.getItem("addressBook")) || [];
+
+    const alreadyExists =
+    addressBook.find(address =>
+        address.address === addressObject.address
+    );
+
+    if(!alreadyExists){
+
+        addressBook.push(addressObject);
+
+        localStorage.setItem(
+            "addressBook",
+            JSON.stringify(addressBook)
+        );
+    }
+}
+
+function openAddressBook(){
+
+    const loggedIn =
+    localStorage.getItem("isLoggedIn");
+
+    if(loggedIn !== "true"){
+
+        alert("Please login first to access Address Book.");
+
+        openLoginPopup();
+
+        return;
+    }
+
+    renderAddressBook();
+
+    document.getElementById("addressBookPopup").style.display =
+    "flex";
+
+    document.getElementById("profileMenu").style.display =
+    "none";
+}
+
+function closeAddressBook(){
+
+    document.getElementById("addressBookPopup").style.display =
+    "none";
+}
+
+function renderAddressBook(){
+
+    const container =
+    document.getElementById("savedAddressList");
+
+    let addressBook =
+    JSON.parse(localStorage.getItem("addressBook")) || [];
+
+    if(addressBook.length === 0){
+
+        container.innerHTML = `
+            <div class="empty-address">
+                <h3>No saved address found</h3>
+                <p>Please add your delivery location.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    addressBook.forEach((address, index) => {
+
+        container.innerHTML += `
+
+            <div class="address-card">
+
+                <h3>📍 ${address.title}</h3>
+
+                <p>${address.address}</p>
+
+                <small>Saved on: ${address.savedAt}</small>
+
+                <div class="address-actions">
+
+                    <button onclick="useSavedAddress(${index})">
+                        Use This
+                    </button>
+
+                    <button onclick="deleteSavedAddress(${index})">
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+}
+
+function useSavedAddress(index){
+
+    let addressBook =
+    JSON.parse(localStorage.getItem("addressBook")) || [];
+
+    const address =
+    addressBook[index];
+
+    localStorage.setItem("userLocationName", address.title);
+    localStorage.setItem("userFullAddress", address.address);
+    localStorage.setItem("userLatitude", address.latitude);
+    localStorage.setItem("userLongitude", address.longitude);
+
+    document.getElementById("currentLocation").innerHTML =
+    address.title;
+
+    closeAddressBook();
+}
+
+function deleteSavedAddress(index){
+
+    let addressBook =
+    JSON.parse(localStorage.getItem("addressBook")) || [];
+
+    addressBook.splice(index, 1);
+
+    localStorage.setItem(
+        "addressBook",
+        JSON.stringify(addressBook)
+    );
+
+    renderAddressBook();
+}
+
+function addAnotherAddress(){
+
+    closeAddressBook();
+
+    detectUserLocation();
+}
+
+/* LOGIN UI */
+
+function updateLoginUI(){
+
+    const user =
+    JSON.parse(localStorage.getItem("maxosmithUser"));
+
+    const loggedIn =
+    localStorage.getItem("isLoggedIn");
+
+    const loginButton =
+    document.getElementById("loginButton");
+
+    const profileCircle =
+    document.getElementById("profileCircle");
+
+    const profileName =
+    document.getElementById("profileName");
+
+    const profileMenu =
+    document.getElementById("profileMenu");
+
+    if(user && loggedIn === "true"){
+
+        loginButton.style.display = "none";
+
+        profileCircle.style.display = "flex";
+
+        profileCircle.innerHTML =
+        user.name.charAt(0).toUpperCase();
+
+        profileName.innerHTML =
+        user.name;
+
+    }else{
+
+        loginButton.style.display = "inline-block";
+
+        profileCircle.style.display = "none";
+
+        profileMenu.style.display = "none";
+    }
+}
+
+function toggleProfileMenu(){
+
+    const menu =
+    document.getElementById("profileMenu");
+
+    menu.style.display =
+    menu.style.display === "block" ? "none" : "block";
+}
+
+function logoutUser(){
+
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("loggedInUser");
+
+    updateLoginUI();
+
+    location.reload();
+}
+
+/* LOGIN POPUP */
+
+function openLoginPopup(){
+    document.getElementById("loginPopup").style.display = "flex";
+}
+
+function closeLoginPopup(){
+    document.getElementById("loginPopup").style.display = "none";
+}
+
+function showSignupForm(){
+    document.getElementById("signupForm").style.display = "block";
+}
+
+/* SIGNUP */
+
+function signupUser(){
+
+    const name =
+    document.getElementById("signupName").value.trim();
+
+    const mobile =
+    document.getElementById("signupMobile").value.trim();
+
+    const email =
+    document.getElementById("signupEmail").value.trim().toLowerCase();
+
+    const password =
+    document.getElementById("signupPassword").value.trim();
+
+    if(name === "" || mobile === "" || email === "" || password === ""){
+        alert("Please fill all signup details.");
+        return;
+    }
+
+    if(mobile.length < 10){
+        alert("Please enter a valid mobile number.");
+        return;
+    }
+
+    const user = {
+        name:name,
+        mobile:mobile,
+        email:email,
+        password:password
+    };
+
+    let users =
+    JSON.parse(localStorage.getItem("maxosmithUsers")) || [];
+
+    const alreadyExists =
+    users.find(u =>
+        u.email === email || u.mobile === mobile
+    );
+
+    if(alreadyExists){
+        alert("This email or mobile number is already registered. Please log in.");
+        return;
+    }
+
+    users.push(user);
+
+    localStorage.setItem("maxosmithUsers", JSON.stringify(users));
+    localStorage.setItem("maxosmithUser", JSON.stringify(user));
+    localStorage.setItem("lastLoginUser", JSON.stringify(user));
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("loggedInUser", user.name);
+
+    saveUserToGoogleSheet(user);
+
+    alert("Account created successfully!");
+
+    closeLoginPopup();
+
+    updateLoginUI();
+}
+
+function saveUserToGoogleSheet(user){
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method:"POST",
+        mode:"no-cors",
+        body:JSON.stringify(user)
+    });
+}
+
+function getUsersFromGoogleSheet(){
+
+    return new Promise((resolve, reject) => {
+
+        const callbackName =
+        "googleSheetCallback_" + Date.now();
+
+        window[callbackName] = function(users){
+
+            delete window[callbackName];
+
+            script.remove();
+
+            resolve(users);
+        };
+
+        const script =
+        document.createElement("script");
+
+        script.src =
+        GOOGLE_SCRIPT_URL +
+        "?callback=" +
+        callbackName +
+        "&time=" +
+        Date.now();
+
+        script.onerror = function(){
+
+            delete window[callbackName];
+
+            reject("Unable to connect to Google Sheet.");
+        };
+
+        document.body.appendChild(script);
+    });
+}
+
+async function loginUser(){
+
+    const loginValue =
+    document.getElementById("loginUser").value.trim().toLowerCase();
+
+    const loginPassword =
+    document.getElementById("loginPassword").value.trim();
+
+    if(loginValue === "" || loginPassword === ""){
+        alert("Please enter login details.");
+        return;
+    }
+
+    let localUsers =
+    JSON.parse(localStorage.getItem("maxosmithUsers")) || [];
+
+    let sheetUsers = [];
+
+    try{
+        sheetUsers =
+        await getUsersFromGoogleSheet();
+    }catch(error){
+        sheetUsers = [];
+    }
+
+    const allUsers =
+    [...localUsers, ...sheetUsers];
+
+    const foundUser =
+    allUsers.find(user =>
+        (
+            String(user.email).toLowerCase() === loginValue ||
+            String(user.mobile) === loginValue
+        ) &&
+        String(user.password) === loginPassword
+    );
+
+    if(!foundUser){
+        alert("Invalid credentials. Please check email/mobile and password.");
+        return;
+    }
+
+    localStorage.setItem("maxosmithUser", JSON.stringify(foundUser));
+    localStorage.setItem("lastLoginUser", JSON.stringify(foundUser));
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("loggedInUser", foundUser.name);
+
+    alert("Login successful!");
+
+    closeLoginPopup();
+
+    updateLoginUI();
+}
+
+/* SEARCH */
+
+const medicineList =
+products.map(product => product.name);
+
+const searchBox =
+document.getElementById("homeSearch");
+
+const suggestions =
+document.getElementById("suggestions");
+
+searchBox.addEventListener("input", function(){
+
+    let value =
+    this.value.toLowerCase();
+
+    suggestions.innerHTML = "";
+
+    if(value.length === 0){
+        return;
+    }
+
+    let matches =
+    medicineList.filter(medicine =>
+        medicine.toLowerCase().includes(value)
+    );
+
+    matches.slice(0,10).forEach(medicine => {
+
+        let item =
+        document.createElement("div");
+
+        item.classList.add("suggestion-item");
+
+        item.textContent =
+        medicine;
+
+        item.onclick = function(){
+
+            searchBox.value =
+            medicine;
+
+            suggestions.innerHTML =
+            "";
+
+            searchMedicine();
+        };
+
+        suggestions.appendChild(item);
+    });
+});
+
+document.addEventListener("click", function(e){
+
+    if(!e.target.closest(".search-container")){
+        suggestions.innerHTML = "";
+    }
+
+    if(
+        !e.target.closest("#profileCircle") &&
+        !e.target.closest("#profileMenu")
+    ){
+        document.getElementById("profileMenu").style.display = "none";
+    }
+});
+
+function searchMedicine(){
+
+    let search =
+    searchBox.value.trim();
+
+    if(search !== ""){
+
+        window.location.href =
+        "all_products.html?search=" +
+        encodeURIComponent(search);
+
+    }else{
+
+        window.location.href =
+        "all_products.html";
+    }
+}
+
+searchBox.addEventListener("keypress", function(event){
+
+    if(event.key === "Enter"){
+        searchMedicine();
+    }
+});
+
+/* FOOTER POPUPS */
+
+function openContact(){
+    document.getElementById("contactPopup").style.display = "flex";
+}
+
+function closeContact(){
+    document.getElementById("contactPopup").style.display = "none";
+}
+
+function openAbout(){
+    document.getElementById("aboutPopup").style.display = "flex";
+}
+
+function closeAbout(){
+    document.getElementById("aboutPopup").style.display = "none";
+}
+
+function openPolicy(){
+    document.getElementById("policyPopup").style.display = "flex";
+}
+
+function closePolicy(){
+    document.getElementById("policyPopup").style.display = "none";
+}
+
+window.onclick = function(event){
+
+    const policyPopup =
+    document.getElementById("policyPopup");
+
+    const loginPopup =
+    document.getElementById("loginPopup");
+
+    const contactPopup =
+    document.getElementById("contactPopup");
+
+    const aboutPopup =
+    document.getElementById("aboutPopup");
+
+    const locationPopup =
+    document.getElementById("locationPopup");
+
+    const addressBookPopup =
+    document.getElementById("addressBookPopup");
+
+    if(event.target === policyPopup){
+        policyPopup.style.display = "none";
+    }
+
+    if(event.target === loginPopup){
+        loginPopup.style.display = "none";
+    }
+
+    if(event.target === contactPopup){
+        contactPopup.style.display = "none";
+    }
+
+    if(event.target === aboutPopup){
+        aboutPopup.style.display = "none";
+    }
+
+    if(event.target === locationPopup){
+        locationPopup.style.display = "none";
+    }
+
+    if(event.target === addressBookPopup){
+        addressBookPopup.style.display = "none";
+    }
+};
+
+updateLoginUI();
+
+loadSavedLocation();
+
+</script>
+
+</body>
+
+</html>

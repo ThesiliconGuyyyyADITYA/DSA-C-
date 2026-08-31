@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Product info
+        </title>
+    </head>
+    
+    <body>
+        <h1>
+            Number of Items :
+        </h1>
+        <label for="number">Select a Number:</label>
+
+<select id="number" name="number">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="13">13</option>
+    <option value="14">14</option>
+    <option value="15">15</option>
+</select>
+    
+    <button onclick="lockSelection()">
+    Select
+    </button>
+
+    <script>
+    function lockSelection() {
+    document.getElementById("number").disabled = true;
+    }
+
+    </script>
+
+    <h2>Invoice</h2>
+
+    <div id="invoice"></div>
+
+    <script>
+    function lockSelection() {
+
+    let quantity = document.getElementById("number").value;
+
+    document.getElementById("number").disabled = true;
+
+    let price = 100;
+    let total = quantity * price;
+
+    document.getElementById("invoice").innerHTML =
+        "<h3>Invoice</h3>" +
+        "<p>Quantity: " + quantity + "</p>" +
+        "<p>Price per item: ₹" + price + "</p>" +
+        "<p>Total Amount: ₹" + total + "</p>";
+    }
+    </script>
+
+    </body>
+</html>

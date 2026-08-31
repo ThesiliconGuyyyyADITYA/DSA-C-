@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | Maxosmith BillDesk</title>
+
+    <link rel="stylesheet" href="dashboard.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+<body>
+
+    <!-- Mobile Overlay -->
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <!-- Sidebar -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-identity">
+                <img
+                    src="logo.png"
+                    alt="Maxosmith BillDesk Logo"
+                >
+
+                <div class="sidebar-brand-text">
+                    <h2>MAXOSMITH</h2>
+                    <span>BillDesk</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="sidebar-collapse-area">
+            <button
+                type="button"
+                class="sidebar-collapse-button"
+                id="sidebarCollapseButton"
+                aria-label="Collapse sidebar"
+                aria-expanded="true"
+                title="Collapse sidebar"
+            >
+                <span class="sidebar-collapse-icon" aria-hidden="true">☰</span>
+                <span class="sidebar-collapse-text">Collapse Menu</span>
+            </button>
+        </div>
+
+        <nav class="sidebar-menu" aria-label="Main navigation">
+
+            <a href="#dashboard" class="menu-link active" data-section="dashboard" data-tooltip="Dashboard">
+                <span class="menu-icon">⌂</span>
+                <span class="menu-text">Dashboard</span>
+            </a>
+
+            <a href="#new-bill" class="menu-link" data-section="new-bill" data-tooltip="Create New Bill">
+                <span class="menu-icon">＋</span>
+                <span class="menu-text">Create New Bill</span>
+            </a>
+
+            <a href="#old-data" class="menu-link" data-section="old-data" data-tooltip="Update Old Ledger Data">
+                <span class="menu-icon">▣</span>
+                <span class="menu-text">Update Old Ledger Data</span>
+            </a>
+
+            <a href="#update-bill" class="menu-link" data-section="update-bill" data-tooltip="Update Bill">
+                <span class="menu-icon">✎</span>
+                <span class="menu-text">Update Bill</span>
+            </a>
+
+            <a href="#ledger" class="menu-link" data-section="ledger" data-tooltip="Retailer Ledger">
+                <span class="menu-icon">₹</span>
+                <span class="menu-text">Retailer Ledger</span>
+            </a>
+
+            <a href="#orders" class="menu-link" data-section="orders" data-tooltip="Orders">
+                <span class="menu-icon">▤</span>
+                <span class="menu-text">Orders</span>
+            </a>
+
+            <a href="#expenses" class="menu-link" data-section="expenses" data-tooltip="Expenses">
+                <span class="menu-icon">−₹</span>
+                <span class="menu-text">Expenses</span>
+            </a>
+
+            <a href="#reports" class="menu-link" data-section="reports" data-tooltip="Reports">
+                <span class="menu-icon">▥</span>
+                <span class="menu-text">Reports</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <button type="button" id="logoutButton" class="logout-button" data-tooltip="Logout">
+                <span class="logout-icon">⇥</span>
+                <span class="logout-text">Logout</span>
+            </button>
+
+            <p>Maxosmith BillDesk v1.0</p>
+
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+        <!-- Top Header -->
+
+        <header class="top-header">
+
+            <div class="header-left">
+
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation menu" title="Open menu"
+                >
+                    ☰
+                </button>
+
+                <div>
+
+                    <h1 id="pageTitle">Dashboard</h1>
+
+                    <p id="currentDate">
+                        Business overview and quick actions
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="header-right">
+
+                <button
+                    type="button"
+                    class="notification-button"
+                    aria-label="Notifications"
+                >
+                    🔔
+                    <span class="notification-count">3</span>
+                </button>
+
+                <div class="user-profile">
+
+                    <div class="user-avatar">
+                        A
+                    </div>
+
+                    <div>
+
+                        <strong id="loggedInUsername">
+                            Admin
+                        </strong>
+
+                        <span>Administrator</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- Dashboard Section -->
+
+        <section
+            class="page-section active-section"
+            id="dashboard"
+        >
+
+            <div class="welcome-banner">
+
+                <div class="welcome-content">
+
+                    <span class="welcome-label">
+                        MAXOSMITH BILLDESK
+                    </span>
+
+                    <h2>
+                        Welcome back,
+                        <span id="welcomeUsername">Admin</span>
+                    </h2>
+
+                    <p>
+                        Manage bills, retailer orders, ledgers,
+                        outstanding balances and monthly earnings
+                        from one dashboard.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="banner-button"
+                        data-open-section="new-bill"
+                    >
+                        Create New Bill
+                    </button>
+
+                </div>
+
+                <div class="welcome-decoration">
+
+                    <div class="receipt-icon">
+                        ₹
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Summary Cards -->
+
+            <div class="summary-grid">
+
+                <article class="summary-card">
+
+                    <div class="summary-icon blue-icon">
+                        ₹
+                    </div>
+
+                    <div class="summary-information">
+
+                        <p>This Month's Earnings</p>
+
+                        <h3 id="monthlyEarnings">
+                            ₹0.00
+                        </h3>
+
+                        <span class="positive-text">
+                            Payments received this month
+                        </span>
+
+                    </div>
+
+                </article>
+
+                <article class="summary-card">
+
+                    <div class="summary-icon yellow-icon">
+                        ⇄
+                    </div>
+
+                    <div class="summary-information">
+
+                        <p>Retailer Outstanding</p>
+
+                        <h3 id="totalOutstanding">
+                            ₹0.00
+                        </h3>
+
+                        <span class="warning-text">
+                            Balance remaining after payments
+                        </span>
+
+                    </div>
+
+                </article>
+
+                
+
+                <article class="summary-card">
+
+                    <div class="summary-icon dark-icon">
+                        ▣
+                    </div>
+
+                    <div class="summary-information">
+
+                        <p>Bills This Month</p>
+
+                        <h3 id="monthlyBills">
+                            0
+                        </h3>
+
+                        <span>
+                            Total invoices created
+                        </span>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+            <!-- Primary Actions -->
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Quick Actions</h2>
+
+                    <p>
+                        Select an option to start working.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="action-grid">
+
+                <article
+                    class="action-card"
+                    data-open-section="new-bill"
+                >
+
+                    <div class="action-number">
+                        01
+                    </div>
+
+                    <div class="action-icon">
+                        ＋
+                    </div>
+
+                    <h3>Create New Bill</h3>
+
+                    <p>
+                        Generate a new invoice for a retailer,
+                        calculate totals and save the bill.
+                    </p>
+
+                    <button type="button">
+                        Create Bill
+                        <span>→</span>
+                    </button>
+
+                </article>
+
+                <article
+                    class="action-card"
+                    data-open-section="old-data"
+                >
+
+                    <div class="action-number">
+                        02
+                    </div>
+
+                    <div class="action-icon">
+                        ▣
+                    </div>
+
+                    <h3>Update Old Ledger Data</h3>
+
+                    <p>
+                        Enter previous bills, payments, opening
+                        stock or retailer balances.
+                    </p>
+
+                    <button type="button">
+                        Update Ledger Data
+                        <span>→</span>
+                    </button>
+
+                </article>
+
+                <article
+                    class="action-card"
+                    data-open-section="update-bill"
+                >
+
+                    <div class="action-number">
+                        03
+                    </div>
+
+                    <div class="action-icon">
+                        ✎
+                    </div>
+
+                    <h3>Update Existing Bill</h3>
+
+                    <p>
+                        Search an invoice by number, retailer
+                        or date and update its information.
+                    </p>
+
+                    <button type="button">
+                        Find Bill
+                        <span>→</span>
+                    </button>
+
+                </article>
+
+                <article
+                    class="action-card"
+                    data-open-section="ledger"
+                >
+
+                    <div class="action-number">
+                        04
+                    </div>
+
+                    <div class="action-icon">
+                        ₹
+                    </div>
+
+                    <h3>Update Ledger</h3>
+
+                    <p>
+                        Add retailer payments, credit entries,
+                        debit entries and balance adjustments.
+                    </p>
+
+                    <button type="button">
+                        Open Ledger
+                        <span>→</span>
+                    </button>
+
+                </article>
+
+                <article
+                    class="action-card"
+                    data-open-section="orders"
+                >
+
+                    <div class="action-number">
+                        05
+                    </div>
+
+                    <div class="action-icon">
+                        ▤
+                    </div>
+
+                    <h3>Manage Orders</h3>
+
+                    <p>
+                        View field orders, create new orders
+                        and update approval or dispatch status.
+                    </p>
+
+                    <button type="button">
+                        View Orders
+                        <span>→</span>
+                    </button>
+
+                </article>
+
+                <article
+                    class="action-card"
+                    data-open-section="reports"
+                >
+
+                    <div class="action-number">
+                        06
+                    </div>
+
+                    <div class="action-icon">
+                        ▥
+                    </div>
+
+                    <h3>Earnings & Outstanding</h3>
+
+                    <p>
+                        Review monthly earnings, sales,
+                        retailer balances and pending payments.
+                    </p>
+
+                    <button type="button">
+                        View Reports
+                        <span>→</span>
+                    </button>
+
+                </article>
+
+            </div>
+
+            <!-- Recent Activity -->
+
+            <div class="dashboard-lower-grid">
+
+                <section class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h2>Recent Bills</h2>
+
+                            <p>
+                                Recently created or updated invoices
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="text-button"
+                            data-open-section="update-bill"
+                        >
+                            View all
+                        </button>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Bill No.</th>
+                                    <th>Retailer</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="recentBillsTable">
+
+                                <tr class="empty-table-row">
+
+                                    <td colspan="5">
+
+                                        No bill data available yet.
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+                <section class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h2>Outstanding Retailers</h2>
+
+                            <p>
+                                Retailers with pending payments
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="text-button"
+                            data-open-section="ledger"
+                        >
+                            View ledger
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="outstanding-list"
+                        id="outstandingRetailerList"
+                    >
+
+                        <div class="empty-state">
+
+                            <span>₹</span>
+
+                            <p>
+                                No retailer outstanding data added.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </section>
+
+        <!-- Create New Bill Section -->
+
+<!-- ======================================
+     Pharmaceutical New Bill Section
+======================================= -->
+
+<section class="page-section" id="new-bill">
+    <form class="bill-form" id="newBillForm" autocomplete="off">
+
+        <div class="pharma-invoice-header">
+            <div class="invoice-company-area">
+                <div class="invoice-company-logo">
+                    <img src="ms_Logo.png" alt="Maxosmith Logo">
+                </div>
+                <div class="invoice-company-details">
+                    <span class="tax-invoice-label">TAX INVOICE</span>
+                    <h2 id="invoiceCompanyName">MAXOSMITH</h2>
+                    <strong id="invoiceCompanyLegalName">Maxosmith (OPC) Private Limited</strong>
+                    <p id="invoiceCompanyAddress">Business address will appear here</p>
+                    <div class="company-contact-line">
+                        <span>Phone: <strong id="invoiceCompanyPhone">-</strong></span>
+                        <span>GSTIN: <strong id="invoiceCompanyGSTIN">-</strong></span>
+                    </div>
+                    <div class="company-contact-line">
+                        <span id="invoiceCompanyDL1">DL No. 1: -</span>
+                        <span id="invoiceCompanyDL2">DL No. 2: -</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invoice-action-area">
+                <button type="button" class="secondary-button" id="clearBillButton">Clear</button>
+                <button type="button" class="secondary-button" id="saveDraftButton">Save Draft</button>
+                <button type="button" class="primary-button" id="previewBillButton">Preview</button>
+            </div>
+        </div>
+
+        <div class="bill-section-card invoice-details-card">
+            <div class="bill-section-title">
+                <div class="section-title-icon">01</div>
+                <div>
+                    <h3>Invoice Details</h3>
+                    <p>Invoice number and bill date</p>
+                </div>
+            </div>
+
+            <div class="bill-details-grid invoice-fields-grid">
+                <div class="bill-input-group">
+                    <label for="newBillNumber">Invoice Number</label>
+                    <input type="text" id="newBillNumber" placeholder="Generating invoice number..." readonly>
+                </div>
+
+                <div class="bill-input-group">
+                    <label for="newBillDate">Bill Date <span>*</span></label>
+                    <input type="date" id="newBillDate" required>
+                </div>
+            </div>
+
+            <div class="payment-term-notice">
+                Payment must be made within 20 days from the bill date. Thereafter, interest at 24% per annum will be charged on the outstanding bill amount.
+            </div>
+        </div>
+
+        <div class="bill-section-card party-details-card">
+            <div class="party-section-header">
+                <div class="bill-section-title">
+                    <div class="section-title-icon">02</div>
+                    <div>
+                        <h3>Party Details</h3>
+                        <p>Retailer or customer information</p>
+                    </div>
+                </div>
+                <button type="button" class="add-retailer-button" id="newRetailerButton">+ New Party</button>
+            </div>
+
+            <div class="bill-details-grid party-fields-grid">
+                <div class="bill-input-group">
+                    <label for="partyType">Party Type <span>*</span></label>
+                    <select id="partyType" required>
+                        <option value="">Select party type</option>
+                        <option value="clinic">Clinic</option>
+                        <option value="hospital">Hospital</option>
+                        <option value="medical-store">Medical Store</option>
+                        <option value="wholesaler">Wholesaler</option>
+                        <option value="distributor">Distributor</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="bill-input-group">
+                    <label for="retailerName">Party Name <span>*</span></label>
+                    <select id="retailerName" required>
+                        <option value="">Select party name</option>
+                    </select>
+                </div>
+
+                <div class="bill-input-group">
+                    <label for="retailerPhone">Phone Number</label>
+                    <input type="tel" id="retailerPhone" maxlength="15" placeholder="Party phone number">
+                </div>
+
+                <div class="bill-input-group party-address-field">
+                    <label for="retailerAddress">Party Address</label>
+                    <textarea id="retailerAddress" rows="3" placeholder="Party address"></textarea>
+                </div>
+            </div>
+
+            <div class="optional-detail-box" id="optionalPartyDetailsBox">
+                <div class="optional-detail-heading">
+                    <div>
+                        <h4>Drug Licence and GST Details</h4>
+                        <p>Enable only when applicable to this party.</p>
+                    </div>
+                </div>
+
+                <div class="optional-toggle-grid">
+                    <div class="optional-field-control" id="partyDLControl">
+                        <label class="switch-control">
+                            <input type="checkbox" id="includePartyDL">
+                            <span class="switch-slider"></span>
+                            <strong>Include Party DL Number</strong>
+                        </label>
+                        <div class="optional-input-area hidden-optional-field" id="partyDLInputArea">
+                            <label for="retailerDrugLicense">Drug Licence Number</label>
+                            <input type="text" id="retailerDrugLicense" placeholder="Enter party drug licence number">
+                        </div>
+                    </div>
+
+                    <div class="optional-field-control" id="partyGSTControl">
+                        <label class="switch-control">
+                            <input type="checkbox" id="includePartyGST">
+                            <span class="switch-slider"></span>
+                            <strong>Include Party GSTIN</strong>
+                        </label>
+                        <div class="optional-input-area hidden-optional-field" id="partyGSTInputArea">
+                            <label for="retailerGST">Party GSTIN</label>
+                            <input type="text" id="retailerGST" maxlength="15" placeholder="Enter 15-character GSTIN">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bill-section-card product-section-card">
+            <div class="product-section-header">
+                <div class="bill-section-title">
+                    <div class="section-title-icon">03</div>
+                    <div>
+                        <h3>Medicine and Product Details</h3>
+                        <p>Add item, batch, manufacturing and tax information</p>
+                    </div>
+                </div>
+                <button type="button" class="add-product-button" id="addProductRowButton">+ Add Material</button>
+            </div>
+
+            <div class="bill-items-wrapper">
+                <table class="bill-items-table medicine-items-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="medicine-name-column">Material / Medicine</th>
+                            <th>HSN</th>
+                            <th>Batch</th>
+                            <th>MFD</th>
+                            <th>Expiry</th>
+                            <th>Qty.</th>
+                            <th>Free</th>
+                            <th>Rate</th>
+                            <th>MRP</th>
+                            <th>Disc.%</th>
+                            <th>GST%</th>
+                            <th>Taxable</th>
+                            <th>Tax</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billItemsBody"></tbody>
+                </table>
+            </div>
+
+            <div class="product-table-footer">
+                <button type="button" class="add-another-product" id="addAnotherProductButton">+ Add another material</button>
+                <span id="totalProductCount">0 materials added</span>
+            </div>
+        </div>
+
+        <div class="bill-bottom-grid">
+            <div class="bill-section-card notes-card">
+                <div class="bill-section-title">
+                    <div class="section-title-icon">04</div>
+                    <div>
+                        <h3>Invoice Notes</h3>
+                        <p>Remarks and sale conditions</p>
+                    </div>
+                </div>
+
+                <div class="bill-input-group remarks-input-group" id="remarksInputGroup">
+                    <label for="billNotes">Remarks</label>
+                    <textarea id="billNotes" rows="2" placeholder="Enter invoice remarks"></textarea>
+                </div>
+
+                <div class="bill-input-group terms-input-group">
+                    <label for="billTerms">Terms and Conditions</label>
+                    <textarea id="billTerms" rows="5">1. Payment must be made within 20 days from the bill date.
+2. Interest at 24% per annum will be charged after the due period.
+3. Goods once sold will not be taken back.
+4. Subject to Haridwar jurisdiction.
+5. Please verify batch number and expiry at the time of delivery.</textarea>
+                </div>
+            </div>
+
+            <div class="bill-section-card calculation-card">
+                <div class="calculation-heading">
+                    <h3>Invoice Summary</h3>
+                    <span>Amounts in INR</span>
+                </div>
+
+                <div class="calculation-row"><span>Gross Material Value</span><strong id="grossAmountDisplay">₹0.00</strong></div>
+                <div class="calculation-row"><span>Item Discount</span><strong id="productDiscountDisplay">- ₹0.00</strong></div>
+                <div class="calculation-row"><span>Taxable Value</span><strong id="taxableAmountDisplay">₹0.00</strong></div>
+                <div class="calculation-row"><span>Total GST</span><strong id="gstAmountDisplay">₹0.00</strong></div>
+
+                <div class="calculation-row editable-calculation-row" id="additionalDiscountRow">
+                    <label for="additionalDiscount">Additional Discount</label>
+                    <div class="summary-input-box"><span>₹</span><input type="number" id="additionalDiscount" min="0" step="0.01" value="0"></div>
+                </div>
+
+                <div class="calculation-row editable-calculation-row" id="transportChargeRow">
+                    <label for="transportCharge">Other Charges</label>
+                    <div class="summary-input-box"><span>₹</span><input type="number" id="transportCharge" min="0" step="0.01" value="0"></div>
+                </div>
+
+                <div class="calculation-row editable-calculation-row" id="roundOffRow">
+                    <label for="roundOffAmount">Round Off</label>
+                    <div class="summary-input-box"><span>₹</span><input type="number" id="roundOffAmount" step="0.01" value="0"></div>
+                </div>
+
+                <div class="grand-total-row"><span>Invoice Total</span><strong id="grandTotalDisplay">₹0.00</strong></div>
+            </div>
+        </div>
+
+        <div class="bill-section-card gst-summary-card">
+            <div class="bill-section-title">
+                <div class="section-title-icon">05</div>
+                <div>
+                    <h3>GST Rate Summary</h3>
+                    <p>Consolidated taxable value and GST by rate</p>
+                </div>
+            </div>
+
+            <div class="tax-summary-table-wrapper">
+                <table class="tax-summary-table">
+                    <thead><tr><th>GST Rate</th><th>Taxable Value</th><th>GST Amount</th><th>Total Tax</th></tr></thead>
+                    <tbody id="taxSummaryBody"><tr><td colspan="4">No taxable materials added.</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bill-section-card invoice-signature-section">
+            <div class="customer-signature-area">
+                <div class="signature-space"></div>
+                <strong>Receiver's Signature</strong>
+                <span>Goods received in satisfactory condition</span>
+            </div>
+
+            <div class="director-signature-area">
+                <p>For <strong id="signatureCompanyName">MAXOSMITH</strong></p>
+                <div class="signature-upload-area">
+                    <img src="" alt="Director Signature" id="directorSignatureImage" class="hidden-signature-image">
+                    <span id="signaturePlaceholder">Director Signature</span>
+                </div>
+                <strong id="directorNameDisplay">Authorised Signatory</strong>
+                <span>Director / Authorised Signatory</span>
+            </div>
+        </div>
+
+        <div class="bill-final-actions">
+            <div class="bill-status-message" id="billStatusMessage"><span>●</span> Bill has not been saved.</div>
+            <div class="final-button-group">
+                <button type="button" class="secondary-button" id="printBillButton">Print Bill</button>
+                <button type="submit" class="save-bill-button" id="saveBillButton">Save New Bill</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+
+
+
+        <section class="page-section" id="old-data">
+            <div class="page-card">
+                <div class="page-card-header">
+                    <div>
+                        <h2>Update Old Ledger Data</h2>
+                        <p>Add historical debit, payment, product return, credit or adjustment entries. Enter a ledger row number to correct an existing entry.</p>
+                    </div>
+                </div>
+
+                <form class="ledger-payment-form" id="oldLedgerForm" autocomplete="off">
+                    <div class="ledger-form-heading">
+                        <div>
+                            <h3>Historical Ledger Entry</h3>
+                            <p>Use the original transaction date. Leave “Ledger Row No.” empty to add a new entry.</p>
+                        </div>
+                    </div>
+
+                    <div class="ledger-form-grid">
+                        <div class="bill-input-group">
+                            <label for="oldLedgerRowNumber">Ledger Row No.</label>
+                            <input type="number" id="oldLedgerRowNumber" min="2" step="1" placeholder="Only for correcting an existing row">
+                        </div>
+
+                        <div class="bill-input-group ledger-wide-field">
+                            <label for="oldLedgerPartyName">Party Name <span>*</span></label>
+                            <input type="text" id="oldLedgerPartyName" list="ledgerPartySuggestions" placeholder="Enter retailer name" required>
+                        </div>
+
+                        <div class="bill-input-group">
+                            <label for="oldLedgerDate">Entry Date <span>*</span></label>
+                            <input type="date" id="oldLedgerDate" required>
+                        </div>
+
+                        <div class="bill-input-group">
+                            <label for="oldLedgerEntryType">Entry Type <span>*</span></label>
+                            <select id="oldLedgerEntryType" required>
+                                <option value="">Select entry type</option>
+                                <option value="Sale">Debit — Products supplied</option>
+                                <option value="Payment">Credit — Payment received</option>
+                                <option value="Product Return">Credit — Products returned</option>
+                                <option value="Debit Adjustment">Debit adjustment</option>
+                                <option value="Credit Adjustment">Credit adjustment</option>
+                                <option value="Opening Balance">Opening balance</option>
+                            </select>
+                        </div>
+
+                        <div class="bill-input-group">
+                            <label for="oldLedgerReference">Reference No.</label>
+                            <input type="text" id="oldLedgerReference" placeholder="Invoice, return note or receipt number">
+                        </div>
+
+                        <div class="bill-input-group">
+                            <label for="oldLedgerAmount">Amount <span>*</span></label>
+                            <input type="number" id="oldLedgerAmount" min="0.01" step="0.01" placeholder="0.00" required>
+                        </div>
+
+                        <div class="bill-input-group ledger-wide-field">
+                            <label for="oldLedgerNotes">Notes / Reason</label>
+                            <textarea id="oldLedgerNotes" rows="3" placeholder="Reason for return, correction or adjustment"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="ledger-form-actions">
+                        <button type="button" class="secondary-button" id="clearOldLedgerButton">Clear</button>
+                        <button type="submit" class="primary-button" id="saveOldLedgerButton">Save Historical Entry</button>
+                    </div>
+                    <p class="bill-status-message" id="oldLedgerStatus"><span>●</span> Historical entry has not been saved.</p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Update Bill Section -->
+
+        <section
+            class="page-section"
+            id="update-bill"
+        >
+
+            <div class="page-card">
+
+                <div class="page-card-header">
+
+                    <div>
+
+                        <h2>Find and Update Bill</h2>
+
+                        <p>
+                            Search for an existing invoice.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <form
+                    class="search-form"
+                    id="billSearchForm"
+                >
+
+                    <div class="form-group">
+
+                        <label for="billNumber">
+                            Bill Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="billNumber"
+                            placeholder="Example: MSB-202627-0001"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="billRetailer">
+                            Retailer Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="billRetailer"
+                            placeholder="Enter retailer name"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="billDate">
+                            Bill Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="billDate"
+                        >
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-button search-button"
+                    >
+                        Search Bill
+                    </button>
+
+                </form>
+
+                <div
+                    class="search-result"
+                    id="billSearchResult"
+                >
+                    Enter at least one search detail.
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Ledger Section -->
+        <section class="page-section" id="ledger">
+            <div class="page-card">
+                <div class="page-card-header">
+                    <div>
+                        <h2>Retailer Ledger</h2>
+                        <p>Record every debit and credit: products supplied, payments received, product returns and balance adjustments.</p>
+                    </div>
+                </div>
+
+                <div class="ledger-layout">
+                    <form class="ledger-payment-form" id="ledgerPaymentForm" autocomplete="off">
+                        <div class="ledger-form-heading">
+                            <div>
+                                <h3>Add Ledger Transaction</h3>
+                                <p>Debit increases retailer outstanding. Credit reduces retailer outstanding.</p>
+                            </div>
+                            <span class="ledger-sync-status" id="ledgerSyncStatus">Connecting...</span>
+                        </div>
+
+                        <div class="ledger-form-grid">
+                            <div class="bill-input-group ledger-wide-field">
+                                <label for="ledgerPartyName">Party Name <span>*</span></label>
+                                <input type="text" id="ledgerPartyName" list="ledgerPartySuggestions" placeholder="Enter retailer or customer name" required>
+                                <datalist id="ledgerPartySuggestions"></datalist>
+                            </div>
+
+                            <div class="bill-input-group">
+                                <label for="ledgerPaymentDate">Entry Date <span>*</span></label>
+                                <input type="date" id="ledgerPaymentDate" required>
+                            </div>
+
+                            <div class="bill-input-group">
+                                <label for="ledgerEntryType">Entry Type <span>*</span></label>
+                                <select id="ledgerEntryType" required>
+                                    <option value="">Select entry type</option>
+                                    <option value="Sale">Debit — Products supplied</option>
+                                    <option value="Payment">Credit — Payment received</option>
+                                    <option value="Product Return">Credit — Products returned</option>
+                                    <option value="Debit Adjustment">Debit adjustment</option>
+                                    <option value="Credit Adjustment">Credit adjustment</option>
+                                </select>
+                            </div>
+
+                            <div class="bill-input-group">
+                                <label for="ledgerReferenceNumber">Reference No.</label>
+                                <input type="text" id="ledgerReferenceNumber" placeholder="Invoice, return note or receipt number">
+                            </div>
+
+                            <div class="bill-input-group" id="ledgerPaymentModeArea">
+                                <label for="ledgerPaymentMode">Payment Mode</label>
+                                <select id="ledgerPaymentMode">
+                                    <option value="">Not applicable</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Online">Online</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="bill-input-group hidden-optional-field" id="ledgerOnlineIdArea">
+                                <label for="ledgerOnlinePaymentId">Online Transaction ID</label>
+                                <input type="text" id="ledgerOnlinePaymentId" placeholder="UPI / UTR / transaction ID">
+                            </div>
+
+                            <div class="bill-input-group hidden-optional-field" id="ledgerCashReceiptArea">
+                                <label for="ledgerCashReceiptId">Cash Receipt ID</label>
+                                <input type="text" id="ledgerCashReceiptId" placeholder="Enter cash receipt number">
+                            </div>
+
+                            <div class="bill-input-group">
+                                <label for="ledgerPaymentAmount">Transaction Amount <span>*</span></label>
+                                <input type="number" id="ledgerPaymentAmount" min="0.01" step="0.01" placeholder="0.00" required>
+                            </div>
+
+                            <div class="bill-input-group">
+                                <label for="ledgerOutstandingBefore">Current Outstanding</label>
+                                <input type="text" id="ledgerOutstandingBefore" value="₹0.00" readonly>
+                            </div>
+
+                            <div class="bill-input-group ledger-balance-field">
+                                <label for="ledgerOutstandingAfter">Outstanding After Entry</label>
+                                <input type="text" id="ledgerOutstandingAfter" value="₹0.00" readonly>
+                            </div>
+
+                            <div class="bill-input-group ledger-wide-field">
+                                <label for="ledgerNotes">Notes / Return Reason</label>
+                                <textarea id="ledgerNotes" rows="3" placeholder="Optional details about the sale, payment, return or adjustment"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="ledger-form-actions">
+                            <button type="button" class="secondary-button" id="clearLedgerPaymentButton">Clear</button>
+                            <button type="submit" class="primary-button" id="saveLedgerPaymentButton">Save Ledger Entry</button>
+                        </div>
+
+                        <p class="bill-status-message" id="ledgerStatusMessage"><span>●</span> Ledger entry has not been saved.</p>
+                    </form>
+
+                    <section class="ledger-history-card">
+                        <div class="ledger-history-heading">
+                            <div>
+                                <h3>Recent Ledger Transactions</h3>
+                                <p>All recent debit and credit entries recorded in Google Sheets.</p>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Row</th>
+                                        <th>Party</th>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Reference</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ledgerHistoryTable">
+                                    <tr class="empty-table-row"><td colspan="8">No ledger transaction has been added.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+<!-- Orders Section -->
+
+        <section
+            class="page-section"
+            id="orders"
+        >
+
+            <div class="page-card">
+
+                <div class="page-card-header">
+
+                    <div>
+
+                        <h2>Retailer Orders</h2>
+
+                        <p>
+                            View, add and update field orders.
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="addOrderButton"
+                    >
+                        Add New Order
+                    </button>
+
+                </div>
+
+                <div class="order-stat-grid">
+
+                    <article>
+
+                        <span>New Orders</span>
+
+                        <strong>0</strong>
+
+                    </article>
+
+                    <article>
+
+                        <span>Approved</span>
+
+                        <strong>0</strong>
+
+                    </article>
+
+                    <article>
+
+                        <span>Dispatched</span>
+
+                        <strong>0</strong>
+
+                    </article>
+
+                    <article>
+
+                        <span>Delivered</span>
+
+                        <strong>0</strong>
+
+                    </article>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Retailer</th>
+                                <th>Staff</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr class="empty-table-row">
+
+                                <td colspan="4">
+
+                                    No retailer orders available.
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Expense Management Section -->
+
+        <section class="page-section" id="expenses">
+
+            <div class="expense-summary-grid">
+
+                <article class="expense-summary-card">
+                    <span>This Month's Expenses</span>
+                    <strong id="expenseMonthlyTotal">₹0.00</strong>
+                    <small>All expense categories</small>
+                </article>
+
+                <article class="expense-summary-card">
+                    <span>Material Purchases</span>
+                    <strong id="expenseMaterialTotal">₹0.00</strong>
+                    <small>Supplier and retailer bills</small>
+                </article>
+
+                <article class="expense-summary-card">
+                    <span>Other Expenses</span>
+                    <strong id="expenseOtherTotal">₹0.00</strong>
+                    <small>Salary, vehicle and miscellaneous</small>
+                </article>
+
+            </div>
+
+            <div class="expense-layout">
+
+                <div class="page-card expense-form-card">
+
+                    <div class="page-card-header">
+                        <div>
+                            <h2>Add New Expense</h2>
+                            <p>Record business expenses and supplier purchase bills.</p>
+                        </div>
+                        <span class="expense-sheet-status" id="expenseSyncStatus">Google Sheets</span>
+                    </div>
+
+                    <form id="expenseForm" autocomplete="off">
+
+                        <div class="expense-form-grid">
+
+                            <div class="bill-input-group">
+                                <label for="expenseDate">Expense Date <span>*</span></label>
+                                <input type="date" id="expenseDate" required>
+                            </div>
+
+                            <div class="bill-input-group">
+                                <label for="expenseType">Expense Type <span>*</span></label>
+                                <select id="expenseType" required>
+                                    <option value="">Select expense type</option>
+                                    <option value="Staff Salary">Staff Salary</option>
+                                    <option value="Material Cost">Material Cost / Purchase Bill</option>
+                                    <option value="Vehicle Expense">Vehicle Expense</option>
+                                    <option value="Miscellaneous">Miscellaneous</option>
+                                </select>
+                            </div>
+
+                            <div class="bill-input-group">
+                                <label for="expensePayee">Paid To / Supplier Name <span>*</span></label>
+                                <input type="text" id="expensePayee" placeholder="Enter employee, supplier or payee name" required>
+                            </div>
+
+                            <div class="bill-input-group">
+                                <label for="expensePaymentMode">Payment Mode <span>*</span></label>
+                                <select id="expensePaymentMode" required>
+                                    <option value="">Select payment mode</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Credit / Payable">Credit / Payable</option>
+                                </select>
+                            </div>
+
+                            <div class="bill-input-group">
+                                <label for="expenseAmount">Expense Amount (₹) <span>*</span></label>
+                                <input type="number" id="expenseAmount" min="0" step="0.01" placeholder="0.00" required>
+                            </div>
+
+                            <div class="bill-input-group expense-description-field">
+                                <label for="expenseDescription">Description / Notes</label>
+                                <textarea id="expenseDescription" rows="3" placeholder="Enter purpose, month, vehicle details or other information"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="material-expense-panel hidden-expense-panel" id="materialExpensePanel">
+
+                            <div class="expense-panel-heading">
+                                <div>
+                                    <h3>Material Purchase Bill Details</h3>
+                                    <p>Enter the bill received from the supplier or retailer.</p>
+                                </div>
+                                <span>MATERIAL COST</span>
+                            </div>
+
+                            <div class="expense-form-grid">
+
+                                <div class="bill-input-group">
+                                    <label for="supplierBillNumber">Supplier Bill Number <span>*</span></label>
+                                    <input type="text" id="supplierBillNumber" placeholder="Enter purchase invoice number">
+                                </div>
+
+                                <div class="bill-input-group">
+                                    <label for="supplierBillDate">Supplier Bill Date <span>*</span></label>
+                                    <input type="date" id="supplierBillDate">
+                                </div>
+
+                                <div class="bill-input-group">
+                                    <label for="materialTaxableAmount">Taxable Amount (₹)</label>
+                                    <input type="number" id="materialTaxableAmount" min="0" step="0.01" placeholder="0.00">
+                                </div>
+
+                                <div class="bill-input-group">
+                                    <label for="materialGSTAmount">GST Amount (₹)</label>
+                                    <input type="number" id="materialGSTAmount" min="0" step="0.01" placeholder="0.00">
+                                </div>
+
+                                <div class="bill-input-group">
+                                    <label for="materialBillTotal">Bill Total (₹) <span>*</span></label>
+                                    <input type="number" id="materialBillTotal" min="0" step="0.01" placeholder="0.00">
+                                </div>
+
+                                <div class="bill-input-group">
+                                    <label for="expenseBillFile">Attach Supplier Bill</label>
+                                    <input type="file" id="expenseBillFile" accept=".pdf,image/png,image/jpeg,image/webp">
+                                    <small class="expense-help-text">Optional PDF or image, maximum 4 MB.</small>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="expense-form-actions">
+                            <button type="reset" class="secondary-button" id="resetExpenseButton">Clear Form</button>
+                            <button type="submit" class="primary-button" id="saveExpenseButton">Save Expense</button>
+                        </div>
+
+                        <div class="expense-form-message" id="expenseFormMessage" aria-live="polite"></div>
+
+                    </form>
+
+                </div>
+
+                <div class="page-card expense-history-card">
+
+                    <div class="page-card-header">
+                        <div>
+                            <h2>Expense History</h2>
+                            <p>Recently recorded salary, material, vehicle and other expenses.</p>
+                        </div>
+
+                        <select id="expenseHistoryFilter">
+                            <option value="All">All Types</option>
+                            <option value="Staff Salary">Staff Salary</option>
+                            <option value="Material Cost">Material Cost</option>
+                            <option value="Vehicle Expense">Vehicle Expense</option>
+                            <option value="Miscellaneous">Miscellaneous</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrapper expense-table-wrapper">
+                        <table class="expense-history-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Paid To / Supplier</th>
+                                    <th>Bill No.</th>
+                                    <th>Mode</th>
+                                    <th>Amount</th>
+                                    <th>Bill</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenseHistoryTable">
+                                <tr class="empty-table-row">
+                                    <td colspan="7">No expense data has been added yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Reports Section -->
+
+        <section
+            class="page-section"
+            id="reports"
+        >
+
+            <div class="page-card">
+
+                <div class="page-card-header">
+
+                    <div>
+
+                        <h2>Earnings and Outstanding Reports</h2>
+
+                        <p>
+                            Monthly financial performance and
+                            retailer receivables.
+                        </p>
+
+                    </div>
+
+                    <select
+                        id="reportMonth"
+                        class="month-selector"
+                    >
+                        <option value="2026-07">
+                            July 2026
+                        </option>
+
+                        <option value="2026-06">
+                            June 2026
+                        </option>
+
+                        <option value="2026-05">
+                            May 2026
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="report-grid">
+
+                    <article class="report-card">
+
+                        <span>Total Sales</span>
+
+                        <strong id="reportSales">
+                            ₹0.00
+                        </strong>
+
+                    </article>
+
+                    <article class="report-card">
+
+                        <span>Gross Profit</span>
+
+                        <strong id="reportGrossProfit">
+                            ₹0.00
+                        </strong>
+
+                    </article>
+
+                    <article class="report-card">
+
+                        <span>Total Expenses</span>
+
+                        <strong id="reportExpenses">
+                            ₹0.00
+                        </strong>
+
+                    </article>
+
+                    <article class="report-card highlighted-report">
+
+                        <span>Net Earnings</span>
+
+                        <strong id="reportNetEarnings">
+                            ₹0.00
+                        </strong>
+
+                    </article>
+
+                    <article class="report-card">
+
+                        <span>Total Outstanding</span>
+
+                        <strong id="reportOutstanding">
+                            ₹0.00
+                        </strong>
+
+                    </article>
+
+                    <article class="report-card">
+
+                        <span>Payments Received</span>
+
+                        <strong id="reportPayments">
+                            ₹0.00
+                        </strong>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Add New Party Modal -->
+    <div class="party-modal" id="newPartyModal" aria-hidden="true">
+        <div class="party-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="newPartyModalTitle">
+            <div class="party-modal-header">
+                <div>
+                    <span class="party-modal-label">PARTY MASTER</span>
+                    <h2 id="newPartyModalTitle">Add New Party</h2>
+                    <p>Save the party once and select it quickly while creating future bills.</p>
+                </div>
+                <button type="button" class="party-modal-close" id="newPartyModalClose" aria-label="Close">×</button>
+            </div>
+
+            <form id="newPartyForm" autocomplete="off">
+                <div class="party-modal-grid">
+                    <div class="bill-input-group">
+                        <label for="newPartyType">Party Type <span>*</span></label>
+                        <select id="newPartyType" required>
+                            <option value="">Select party type</option>
+                            <option value="clinic">Clinic</option>
+                            <option value="hospital">Hospital</option>
+                            <option value="medical-store">Medical Store</option>
+                            <option value="wholesaler">Wholesaler</option>
+                            <option value="distributor">Distributor</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="bill-input-group">
+                        <label for="newPartyName">Party Name <span>*</span></label>
+                        <input type="text" id="newPartyName" placeholder="Enter party name" required>
+                    </div>
+
+                    <div class="bill-input-group">
+                        <label for="newPartyPhone">Phone Number</label>
+                        <input type="tel" id="newPartyPhone" maxlength="15" placeholder="Enter phone number">
+                    </div>
+
+                    <div class="bill-input-group">
+                        <label for="newPartyGSTIN">GSTIN</label>
+                        <input type="text" id="newPartyGSTIN" maxlength="15" placeholder="Enter 15-character GSTIN">
+                    </div>
+
+                    <div class="bill-input-group">
+                        <label for="newPartyDrugLicence">Drug Licence No.</label>
+                        <input type="text" id="newPartyDrugLicence" placeholder="Enter drug licence number">
+                    </div>
+
+                    <div class="bill-input-group party-modal-address">
+                        <label for="newPartyAddress">Address</label>
+                        <textarea id="newPartyAddress" rows="4" placeholder="Enter complete address"></textarea>
+                    </div>
+                </div>
+
+                <div class="party-modal-actions">
+                    <button type="button" class="secondary-button" id="cancelNewPartyButton">Cancel</button>
+                    <button type="submit" class="primary-button" id="saveNewPartyButton">Save Party</button>
+                </div>
+
+                <div class="party-form-message" id="newPartyMessage" aria-live="polite"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+
+    <div
+        class="modal"
+        id="actionModal"
+        aria-hidden="true"
+    >
+
+        <div class="modal-content">
+
+            <button
+                type="button"
+                class="modal-close"
+                id="modalClose"
+            >
+                ×
+            </button>
+
+            <div class="modal-icon">
+                ✓
+            </div>
+
+            <h2 id="modalTitle">
+                Feature Selected
+            </h2>
+
+            <p id="modalMessage">
+                This feature will be connected in the next step.
+            </p>
+
+            <button
+                type="button"
+                class="primary-button modal-button"
+                id="modalOkayButton"
+            >
+                Okay
+            </button>
+
+        </div>
+
+    </div>
+    <!-- Invoice PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+    <!-- Dedicated A4 landscape invoice PDF template is generated by dashboard.js -->
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Maxosmith Health+</title>
+    <link rel="stylesheet" href="all_products.css">
+</head>
+
+<body>
+
+<header>
+
+    <img src="logo_removerbg.png"
+     width="180"
+     class="logo"
+     onclick="window.location.href='homepage_maxo.html'">
+
+    <nav>
+
+        <button class="nav-btn"
+        onclick="window.location.href='homepage_maxo.html'">
+            Home
+        </button>
+
+        <button class="nav-btn"
+        onclick="window.location.href='all_products.html'">
+            Products
+        </button>
+
+        <button class="nav-btn cart-btn"
+        onclick="window.location.href='cart.html'">
+            Cart
+            <span id="cart-count">0</span>
+        </button>
+
+    </nav>
+
+</header>
+
+<h1>OUR PRODUCTS</h1>
+
+<div class="search-section">
+
+    <input type="text"
+           id="searchBox"
+           placeholder="Search medicines..."
+           class="search-bar">
+
+    <button class="search-btn"
+    onclick="searchProducts()">
+        Search
+    </button>
+
+</div>
+
+<div class="category-section" id="categorySection"></div>
+
+<div id="products"></div>
+
+<script src="products.js"></script>
+
+<script>
+
+let quantities = {};
+
+products.forEach(product => {
+    quantities[Number(product.id)] = 1;
+});
+
+let selectedCategory = "All";
+
+const categories = [
+    "All",
+    "Pain / Fever",
+    "Cough / Cold",
+    "Antibiotic / Anti-infective",
+    "Acidity / Digestion",
+    "Vitamins / Supplements",
+    "Liver / Appetite",
+    "Skin / Ointment",
+    "Steroid / Allergy",
+    "BP / Heart",
+    "Injection",
+    "Other"
+];
+
+function cleanCartDuplicates(){
+
+    let cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+    const mergedCart = [];
+
+    cart.forEach(item => {
+
+        const id = Number(item.id);
+        const quantity = Number(item.quantity) || 1;
+
+        const existingItem =
+        mergedCart.find(cartItem =>
+            Number(cartItem.id) === id
+        );
+
+        if(existingItem){
+            existingItem.quantity += quantity;
+        }else{
+            mergedCart.push({
+                id: id,
+                quantity: quantity
+            });
+        }
+
+    });
+
+    localStorage.setItem("cart", JSON.stringify(mergedCart));
+
+    return mergedCart;
+}
+
+function updateCartBadge(){
+
+    const cart =
+    cleanCartDuplicates();
+
+    let totalItems = 0;
+
+    cart.forEach(item => {
+        totalItems += Number(item.quantity);
+    });
+
+    document.getElementById("cart-count").innerHTML =
+    totalItems;
+}
+
+function displayProducts(productArray){
+
+    document.getElementById("products").innerHTML = "";
+
+    productArray.forEach(product => {
+
+        const productId = Number(product.id);
+
+        if(!quantities[productId]){
+            quantities[productId] = 1;
+        }
+
+        const image =
+        product.image && product.image.trim() !== ""
+        ? product.image
+        : "no-image.png";
+
+        document.getElementById("products").innerHTML += `
+
+        <div class="product-card">
+
+            <img src="${image}">
+
+            <div class="product-info">
+
+                <h2>${product.name}</h2>
+
+                <div class="category-tag">
+                    ${getCategory(product)}
+                </div>
+
+                <div class="price-section">
+
+                    <div class="price-right">
+
+                        <div class="rate">
+                            ${product.rate}
+                        </div>
+
+                        <div class="mrp">
+                            MRP: ${product.MRP}
+                        </div>
+
+                    </div>
+
+                    <div class="pack">
+                        Pack: ${product.pack}
+                    </div>
+
+                </div>
+
+                <div class="cart-controls">
+
+                    <button class="qty-btn"
+                    onclick="changeQty(${productId}, -1)">
+                        -
+                    </button>
+
+                    <span id="qty-${productId}">
+                        ${quantities[productId]}
+                    </span>
+
+                    <button class="qty-btn"
+                    onclick="changeQty(${productId}, 1)">
+                        +
+                    </button>
+
+                </div>
+
+                <div class="button-row">
+
+                    <button class="add-cart-btn"
+                    onclick="addToCart(${productId})">
+                        🛒 Add To Cart
+                    </button>
+
+                    <button class="buy-btn"
+                    onclick="window.location.href='product.html?id=${productId}'">
+                        View Details
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+function getCategory(product){
+
+    const name = product.name.toLowerCase();
+
+    if(
+        name.includes("sumo") ||
+        name.includes("flexon") ||
+        name.includes("ketrol") ||
+        name.includes("zerodol") ||
+        name.includes("meftal") ||
+        name.includes("combiflam") ||
+        name.includes("dolo") ||
+        name.includes("parazent") ||
+        name.includes("parasmit") ||
+        name.includes("dalnex") ||
+        name.includes("nimesul") ||
+        name.includes("ketorin") ||
+        name.includes("ibugesic") ||
+        name.includes("oxalgin") ||
+        name.includes("intagesic") ||
+        name.includes("aldort")
+    ){
+        return "Pain / Fever";
+    }
+
+    if(
+        name.includes("cheston") ||
+        name.includes("kufris") ||
+        name.includes("kufzex") ||
+        name.includes("colrix") ||
+        name.includes("alcit") ||
+        name.includes("levo")
+    ){
+        return "Cough / Cold";
+    }
+
+    if(
+        name.includes("ciplox") ||
+        name.includes("zanocin") ||
+        name.includes("monocef") ||
+        name.includes("zifi") ||
+        name.includes("mox") ||
+        name.includes("amox") ||
+        name.includes("azrist") ||
+        name.includes("oflox") ||
+        name.includes("alewfix") ||
+        name.includes("ofris")
+    ){
+        return "Antibiotic / Anti-infective";
+    }
+
+    if(
+        name.includes("pantop") ||
+        name.includes("panunf") ||
+        name.includes("raborise") ||
+        name.includes("omirus") ||
+        name.includes("digene") ||
+        name.includes("gelusin") ||
+        name.includes("aciloc") ||
+        name.includes("megnex") ||
+        name.includes("unienzyme") ||
+        name.includes("vomzex")
+    ){
+        return "Acidity / Digestion";
+    }
+
+    if(
+        name.includes("folvite") ||
+        name.includes("evion") ||
+        name.includes("neurobion") ||
+        name.includes("becosules") ||
+        name.includes("dexorange") ||
+        name.includes("arlovit") ||
+        name.includes("alvit") ||
+        name.includes("enerbest")
+    ){
+        return "Vitamins / Supplements";
+    }
+
+    if(
+        name.includes("liv") ||
+        name.includes("apzex")
+    ){
+        return "Liver / Appetite";
+    }
+
+    if(
+        name.includes("betonovate") ||
+        name.includes("quadriderm")
+    ){
+        return "Skin / Ointment";
+    }
+
+    if(
+        name.includes("wysolone") ||
+        name.includes("omnacortil") ||
+        name.includes("betnesol") ||
+        name.includes("ciplactin") ||
+        name.includes("all night")
+    ){
+        return "Steroid / Allergy";
+    }
+
+    if(
+        name.includes("amlokind") ||
+        name.includes("amlopres") ||
+        name.includes("telmikind") ||
+        name.includes("dytor")
+    ){
+        return "BP / Heart";
+    }
+
+    if(
+        name.includes("injection") ||
+        name.includes("vial") ||
+        name.includes("iv")
+    ){
+        return "Injection";
+    }
+
+    return "Other";
+}
+
+function displayCategoryButtons(){
+
+    let html = "";
+
+    categories.forEach(category => {
+
+        html += `
+            <button class="category-btn ${category === selectedCategory ? "active" : ""}"
+            onclick="filterByCategory('${category}')">
+                ${category}
+            </button>
+        `;
+
+    });
+
+    document.getElementById("categorySection").innerHTML =
+    html;
+}
+
+function filterByCategory(category){
+
+    selectedCategory = category;
+
+    displayCategoryButtons();
+
+    applyFilters();
+}
+
+function applyFilters(){
+
+    const searchText =
+    document.getElementById("searchBox")
+    .value
+    .toLowerCase()
+    .trim();
+
+    const filteredProducts =
+    products.filter(product => {
+
+        const matchesSearch =
+        product.name.toLowerCase().includes(searchText);
+
+        const matchesCategory =
+        selectedCategory === "All" ||
+        getCategory(product) === selectedCategory;
+
+        return matchesSearch && matchesCategory;
+    });
+
+    displayProducts(filteredProducts);
+}
+
+function changeQty(id, amount){
+
+    id = Number(id);
+
+    if(!quantities[id]){
+        quantities[id] = 1;
+    }
+
+    quantities[id] += amount;
+
+    if(quantities[id] < 1){
+        quantities[id] = 1;
+    }
+
+    const qtyElement =
+    document.getElementById(`qty-${id}`);
+
+    if(qtyElement){
+        qtyElement.innerHTML = quantities[id];
+    }
+}
+
+function addToCart(id){
+
+    id = Number(id);
+
+    let cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+    const qtyToAdd =
+    Number(quantities[id]) || 1;
+
+    const existingItem =
+    cart.find(item =>
+        Number(item.id) === id
+    );
+
+    if(existingItem){
+
+        existingItem.quantity =
+        Number(existingItem.quantity) + qtyToAdd;
+
+    }else{
+
+        cart.push({
+            id: id,
+            quantity: qtyToAdd
+        });
+
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    cleanCartDuplicates();
+
+    updateCartBadge();
+
+    const qtyElement =
+    document.getElementById(`qty-${id}`);
+
+    if(qtyElement){
+        qtyElement.innerHTML = quantities[id];
+    }
+
+    alert("ITEM ADDED TO CART");
+}
+
+function searchProducts(){
+    applyFilters();
+}
+
+document.getElementById("searchBox")
+.addEventListener("input", searchProducts);
+
+const params =
+new URLSearchParams(window.location.search);
+
+const searchValue =
+params.get("search");
+
+displayCategoryButtons();
+
+if(searchValue){
+
+    document.getElementById("searchBox").value =
+    searchValue;
+
+    searchProducts();
+
+}else{
+
+    displayProducts(products);
+}
+
+updateCartBadge();
+
+</script>
+
+</body>
+
+</html>
