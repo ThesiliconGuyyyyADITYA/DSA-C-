@@ -2,5 +2,7 @@
 using namespace std;
 
 int main() {
-    cout << "C++";
+    int age = 25 ;
+    cout<<sizeof(age)<<"C++";
+    return 0 ;
 }
